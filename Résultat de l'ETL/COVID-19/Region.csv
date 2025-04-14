@@ -1,0 +1,249 @@
+id_region,nom_region,id_pays
+1,Afghanistan,1
+2,Albania,2
+3,Algeria,3
+4,Andorra,4
+5,Angola,5
+6,Antigua and Barbuda,6
+7,Argentina,7
+8,Armenia,8
+9,Australia,9
+10,Austria,10
+11,Azerbaijan,11
+12,Bahamas,12
+13,Bahrain,13
+14,Bangladesh,14
+15,Barbados,15
+16,Belarus,16
+17,Belgium,17
+18,Benin,18
+19,Bhutan,19
+20,Bolivia,20
+21,Bosnia and Herzegovina,21
+22,Brazil,22
+23,Brunei,23
+24,Bulgaria,24
+25,Burkina Faso,25
+26,Cabo Verde,26
+27,Cambodia,27
+28,Cameroon,28
+29,Canada,29
+30,Central African Republic,30
+31,Chad,31
+32,Chile,32
+33,China,33
+34,Colombia,34
+35,Congo (Brazzaville),35
+36,Congo (Kinshasa),36
+37,Costa Rica,37
+38,Cote d'Ivoire,38
+39,Croatia,39
+40,Cuba,40
+41,Cyprus,41
+42,Czechia,42
+43,Denmark,43
+44,Greenland,44
+45,Djibouti,45
+46,Dominican Republic,46
+47,Ecuador,47
+48,Egypt,48
+49,El Salvador,49
+50,Equatorial Guinea,50
+51,Eritrea,51
+52,Estonia,52
+53,Eswatini,53
+54,Ethiopia,54
+55,Fiji,55
+56,Finland,56
+57,France,57
+58,Gabon,58
+59,Gambia,59
+60,Georgia,60
+61,Germany,61
+62,Ghana,62
+63,Greece,63
+64,Guatemala,64
+65,Guinea,65
+66,Guyana,66
+67,Haiti,67
+68,Holy See,68
+69,Honduras,69
+70,Hungary,70
+71,Iceland,71
+72,India,72
+73,Indonesia,73
+74,Iran,74
+75,Iraq,75
+76,Ireland,76
+77,Israel,77
+78,Italy,78
+79,Jamaica,79
+80,Japan,80
+81,Jordan,81
+82,Kazakhstan,82
+83,Kenya,83
+84,South Korea,84
+85,Kuwait,85
+86,Kyrgyzstan,86
+87,Latvia,87
+88,Lebanon,88
+89,Liberia,89
+90,Liechtenstein,90
+91,Lithuania,91
+92,Luxembourg,92
+93,Madagascar,93
+94,Malaysia,94
+95,Maldives,95
+96,Malta,96
+97,Mauritania,97
+98,Mauritius,98
+99,Mexico,99
+100,Moldova,100
+101,Monaco,101
+102,Mongolia,102
+103,Montenegro,103
+104,Morocco,104
+105,Namibia,105
+106,Nepal,106
+107,Netherlands,107
+108,New Zealand,108
+109,Nicaragua,109
+110,Niger,110
+111,Nigeria,111
+112,North Macedonia,112
+113,Norway,113
+114,Oman,114
+115,Pakistan,115
+116,Panama,116
+117,Papua New Guinea,117
+118,Paraguay,118
+119,Peru,119
+120,Philippines,120
+121,Poland,121
+122,Portugal,122
+123,Qatar,123
+124,Romania,124
+125,Russia,125
+126,Rwanda,126
+127,Saint Lucia,127
+128,Saint Vincent and the Grenadines,128
+129,San Marino,129
+130,Saudi Arabia,130
+131,Senegal,131
+132,Serbia,132
+133,Seychelles,133
+134,Singapore,134
+135,Slovakia,135
+136,Slovenia,136
+137,Somalia,137
+138,South Africa,138
+139,Spain,139
+140,Sri Lanka,140
+141,Sudan,141
+142,Suriname,142
+143,Sweden,143
+144,Switzerland,144
+145,Taiwan*,145
+146,Tanzania,146
+147,Thailand,147
+148,Togo,148
+149,Trinidad and Tobago,149
+150,Tunisia,150
+151,Turkey,151
+152,Uganda,152
+153,Ukraine,153
+154,United Arab Emirates,154
+155,United Kingdom,155
+156,Uruguay,156
+157,US,157
+158,Uzbekistan,158
+159,Venezuela,159
+160,Vietnam,160
+161,Zambia,161
+162,Zimbabwe,162
+163,Dominica,163
+164,Grenada,164
+165,Mozambique,165
+166,Syria,166
+167,Timor-Leste,167
+168,Belize,168
+169,Laos,169
+170,Libya,170
+171,West Bank and Gaza,171
+172,Guinea-Bissau,172
+173,Mali,173
+174,Saint Kitts and Nevis,174
+175,Kosovo,175
+176,Burma,176
+177,Botswana,177
+178,Burundi,178
+179,Sierra Leone,179
+180,Malawi,180
+181,South Sudan,181
+182,Western Sahara,182
+183,Sao Tome and Principe,183
+184,Yemen,184
+185,Comoros,185
+186,Tajikistan,186
+187,Lesotho,187
+188,Anguilla,188
+189,Antigua And Barbuda,189
+190,Aruba,190
+191,Bermuda,191
+192,Bosnia And Herzegovina,192
+193,British Virgin Islands,193
+194,Brunei Darussalam,194
+195,Caribbean Netherlands,195
+196,Cayman Islands,196
+197,Channel Islands,197
+198,China Hong Kong Sar,198
+199,China Macao Sar,199
+200,Congo,200
+201,Cook Islands,201
+202,Cote D Ivoire,202
+203,Curacao,203
+204,Czech Republic,204
+205,Democratic Republic Of The Congo,205
+206,Faeroe Islands,206
+207,Falkland Islands Malvinas,207
+208,French Guiana,208
+209,French Polynesia,209
+210,Gibraltar,210
+211,Guadeloupe,211
+212,Guinea Bissau,212
+213,Isle Of Man,213
+214,Kiribati,214
+215,Macedonia,215
+216,Marshall Islands,216
+217,Martinique,217
+218,Mayotte,218
+219,Micronesia,219
+220,Montserrat,220
+221,Myanmar,221
+222,Nauru,222
+223,New Caledonia,223
+224,Niue,224
+225,Palau,225
+226,Reunion,226
+227,Saint Barthelemy,227
+228,Saint Helena,228
+229,Saint Kitts And Nevis,229
+230,Saint Martin,230
+231,Saint Pierre And Miquelon,231
+232,Saint Vincent And The Grenadines,232
+233,Samoa,233
+234,Sao Tome And Principe,234
+235,Sint Maarten,235
+236,Solomon Islands,236
+237,State Of Palestine,237
+238,Swaziland,238
+239,Taiwan,239
+240,Timor Leste,240
+241,Tonga,241
+242,Trinidad And Tobago,242
+243,Turks And Caicos Islands,243
+244,UK,244
+245,USA,245
+246,Vanuatu,246
+247,Viet Nam,247
+248,Wallis And Futuna Islands,248

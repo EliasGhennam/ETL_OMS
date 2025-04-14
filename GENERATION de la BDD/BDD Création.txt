@@ -1,0 +1,38 @@
+-- Voici la première étape : Modifier ta base de données pour qu'elle supporte les UPDATES correctement !
+
+-- 1. Modifier la table maladie pour ID automatique
+ALTER TABLE maladie
+    ALTER COLUMN id_maladie DROP DEFAULT;
+
+DROP SEQUENCE IF EXISTS maladie_id_maladie_seq;
+
+CREATE SEQUENCE maladie_id_maladie_seq
+    START 1
+    INCREMENT 1
+    OWNED BY maladie.id_maladie;
+
+ALTER TABLE maladie
+    ALTER COLUMN id_maladie SET DEFAULT nextval('maladie_id_maladie_seq');
+
+-- 2. Ajouter une contrainte UNIQUE sur nom_maladie
+ALTER TABLE maladie
+ADD CONSTRAINT unique_nom_maladie UNIQUE (nom_maladie);
+
+
+-- 3. Ajouter une contrainte UNIQUE sur pays (sur le vrai nom du pays)
+ALTER TABLE pays
+ADD CONSTRAINT unique_nom_pays UNIQUE (nom_pays);
+
+
+-- 4. Ajouter une contrainte UNIQUE sur region (nom_region)
+ALTER TABLE region
+ADD CONSTRAINT unique_nom_region UNIQUE (nom_region);
+
+
+-- 5. (Optionnel) Nettoyer les données existantes si besoin (par ex. si duplication avant les contraintes)
+-- DELETE FROM maladie WHERE id_maladie > 1;
+
+-- 6. Vérifier que tout est OK
+\d public.maladie
+\d public.pays
+\d public.region

@@ -1,0 +1,249 @@
+country,id_pays
+Afghanistan,1
+Albania,2
+Algeria,3
+Andorra,4
+Angola,5
+Antigua and Barbuda,6
+Argentina,7
+Armenia,8
+Australia,9
+Austria,10
+Azerbaijan,11
+Bahamas,12
+Bahrain,13
+Bangladesh,14
+Barbados,15
+Belarus,16
+Belgium,17
+Benin,18
+Bhutan,19
+Bolivia,20
+Bosnia and Herzegovina,21
+Brazil,22
+Brunei,23
+Bulgaria,24
+Burkina Faso,25
+Cabo Verde,26
+Cambodia,27
+Cameroon,28
+Canada,29
+Central African Republic,30
+Chad,31
+Chile,32
+China,33
+Colombia,34
+Congo (Brazzaville),35
+Congo (Kinshasa),36
+Costa Rica,37
+Cote d'Ivoire,38
+Croatia,39
+Cuba,40
+Cyprus,41
+Czechia,42
+Denmark,43
+Greenland,44
+Djibouti,45
+Dominican Republic,46
+Ecuador,47
+Egypt,48
+El Salvador,49
+Equatorial Guinea,50
+Eritrea,51
+Estonia,52
+Eswatini,53
+Ethiopia,54
+Fiji,55
+Finland,56
+France,57
+Gabon,58
+Gambia,59
+Georgia,60
+Germany,61
+Ghana,62
+Greece,63
+Guatemala,64
+Guinea,65
+Guyana,66
+Haiti,67
+Holy See,68
+Honduras,69
+Hungary,70
+Iceland,71
+India,72
+Indonesia,73
+Iran,74
+Iraq,75
+Ireland,76
+Israel,77
+Italy,78
+Jamaica,79
+Japan,80
+Jordan,81
+Kazakhstan,82
+Kenya,83
+South Korea,84
+Kuwait,85
+Kyrgyzstan,86
+Latvia,87
+Lebanon,88
+Liberia,89
+Liechtenstein,90
+Lithuania,91
+Luxembourg,92
+Madagascar,93
+Malaysia,94
+Maldives,95
+Malta,96
+Mauritania,97
+Mauritius,98
+Mexico,99
+Moldova,100
+Monaco,101
+Mongolia,102
+Montenegro,103
+Morocco,104
+Namibia,105
+Nepal,106
+Netherlands,107
+New Zealand,108
+Nicaragua,109
+Niger,110
+Nigeria,111
+North Macedonia,112
+Norway,113
+Oman,114
+Pakistan,115
+Panama,116
+Papua New Guinea,117
+Paraguay,118
+Peru,119
+Philippines,120
+Poland,121
+Portugal,122
+Qatar,123
+Romania,124
+Russia,125
+Rwanda,126
+Saint Lucia,127
+Saint Vincent and the Grenadines,128
+San Marino,129
+Saudi Arabia,130
+Senegal,131
+Serbia,132
+Seychelles,133
+Singapore,134
+Slovakia,135
+Slovenia,136
+Somalia,137
+South Africa,138
+Spain,139
+Sri Lanka,140
+Sudan,141
+Suriname,142
+Sweden,143
+Switzerland,144
+Taiwan*,145
+Tanzania,146
+Thailand,147
+Togo,148
+Trinidad and Tobago,149
+Tunisia,150
+Turkey,151
+Uganda,152
+Ukraine,153
+United Arab Emirates,154
+United Kingdom,155
+Uruguay,156
+US,157
+Uzbekistan,158
+Venezuela,159
+Vietnam,160
+Zambia,161
+Zimbabwe,162
+Dominica,163
+Grenada,164
+Mozambique,165
+Syria,166
+Timor-Leste,167
+Belize,168
+Laos,169
+Libya,170
+West Bank and Gaza,171
+Guinea-Bissau,172
+Mali,173
+Saint Kitts and Nevis,174
+Kosovo,175
+Burma,176
+Botswana,177
+Burundi,178
+Sierra Leone,179
+Malawi,180
+South Sudan,181
+Western Sahara,182
+Sao Tome and Principe,183
+Yemen,184
+Comoros,185
+Tajikistan,186
+Lesotho,187
+Anguilla,188
+Antigua And Barbuda,189
+Aruba,190
+Bermuda,191
+Bosnia And Herzegovina,192
+British Virgin Islands,193
+Brunei Darussalam,194
+Caribbean Netherlands,195
+Cayman Islands,196
+Channel Islands,197
+China Hong Kong Sar,198
+China Macao Sar,199
+Congo,200
+Cook Islands,201
+Cote D Ivoire,202
+Curacao,203
+Czech Republic,204
+Democratic Republic Of The Congo,205
+Faeroe Islands,206
+Falkland Islands Malvinas,207
+French Guiana,208
+French Polynesia,209
+Gibraltar,210
+Guadeloupe,211
+Guinea Bissau,212
+Isle Of Man,213
+Kiribati,214
+Macedonia,215
+Marshall Islands,216
+Martinique,217
+Mayotte,218
+Micronesia,219
+Montserrat,220
+Myanmar,221
+Nauru,222
+New Caledonia,223
+Niue,224
+Palau,225
+Reunion,226
+Saint Barthelemy,227
+Saint Helena,228
+Saint Kitts And Nevis,229
+Saint Martin,230
+Saint Pierre And Miquelon,231
+Saint Vincent And The Grenadines,232
+Samoa,233
+Sao Tome And Principe,234
+Sint Maarten,235
+Solomon Islands,236
+State Of Palestine,237
+Swaziland,238
+Taiwan,239
+Timor Leste,240
+Tonga,241
+Trinidad And Tobago,242
+Turks And Caicos Islands,243
+UK,244
+USA,245
+Vanuatu,246
+Viet Nam,247
+Wallis And Futuna Islands,248
