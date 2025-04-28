@@ -34,7 +34,7 @@ def normalize_column_name(col):
 def apply_flexible_mapping(df):
     # Synonymes pour mapper vers nos champs
     column_synonyms = {
-        "country": ["country", "location", "region", "country_region", "province_state"],
+        "country": ["country", "location", "region", "country_region", "province_state", "country/region", "countries", "country name", "nation"],
         "date": ["date", "observation_date", "report_date"],
         "confirmed": ["confirmed", "total_cases", "cases"],
         "deaths": ["deaths", "total_deaths", "fatalities"],
@@ -45,17 +45,30 @@ def apply_flexible_mapping(df):
         "latitude": ["lat", "latitude"],
         "longitude": ["long", "longitude"]
     }
+
     mapping = {}
     normalized_cols = {normalize_column_name(c): c for c in df.columns}
 
-    for std_col, synonyms in column_synonyms.items():
-        for syn in synonyms:
-            n = normalize_column_name(syn)
+    # Normalise les synonymes dès le départ
+    normalized_synonyms = {
+        std_col: [normalize_column_name(syn) for syn in synonyms]
+        for std_col, synonyms in column_synonyms.items()
+    }
+
+    for std_col, synonyms in normalized_synonyms.items():
+        for n in synonyms:
             if n in normalized_cols:
                 mapping[normalized_cols[n]] = std_col
                 break
 
-    return df.rename(columns=mapping)
+    df = df.rename(columns=mapping)
+
+    # 🟠 Correction : vérifier après le renommage !
+    if "country" not in df.columns:
+        print(f"⚠️ Attention : la colonne 'country' n'a pas été détectée dans ce fichier : {df.columns.tolist()}")
+
+    return df
+
 
 def extract(fp):
     return pd.read_csv(fp) if fp.lower().endswith(".csv") else pd.read_json(fp)
@@ -76,11 +89,12 @@ def get_population(country_name, cur):
 def complete_missing_columns(df):
     for col in standard_columns:
         if col not in df.columns:
-            df[col] = pd.NA if col in ("latitude","longitude") else 0
+            df[col] = pd.NA
     return df
 
 def transform(df, cur):
     df = apply_flexible_mapping(df)
+    print(f"👉 Colonnes après mapping : {df.columns.tolist()}")
     df = complete_missing_columns(df)
 
     # 🗓️ Conversion robuste des dates
@@ -96,7 +110,13 @@ def transform(df, cur):
     # 🧮 Conversion per_100k ou per_million en valeurs absolues
     pop = None
     if "country" in df.columns:
-        pop = get_population(df["country"].iloc[0], cur)
+        if not df.empty:
+            pop = get_population(df["country"].iloc[0], cur)
+        else:
+            print("⚠️ DataFrame vide après nettoyage des dates, pas de population récupérée.")
+    else:
+        print("⚠️ Colonne 'country' non détectée après le mapping.")
+
 
     for col in df.columns:
         if "per_100_000" in col or "per_100k" in col:
@@ -196,6 +216,11 @@ def copy_into_temp_statistique(cur=None, conn=None):
         conn.close()
 
 def run_etl():
+
+    nb_fichiers_traite = 0
+    nb_fichiers_ignores = 0
+
+
     conn = connect_db()
     conn.autocommit = False  # On gère la transaction manuellement
     cur = conn.cursor()
@@ -222,6 +247,17 @@ def run_etl():
         print(f"📄 {fn} → {mal}")
         df_raw = extract(path)
         df = transform(df_raw, cur)
+        if "country" not in df.columns or df.empty:
+            print(f"⚠️ Fichier {fn} ignoré car pas de colonne 'country' ou DataFrame vide après filtrage.")
+            nb_fichiers_ignores += 1
+            continue
+
+        nb_fichiers_traite += 1
+
+
+        # ➕ Ajoute cette sécurité :
+        df = df[df["country"].notna()]
+
 
         # Upsert maladie
         if mal not in maladie_dict:
@@ -232,6 +268,10 @@ def run_etl():
 
         for _, r in df.iterrows():
             country = r["country"]
+            if pd.isna(country):
+                print(f"❌ Ligne ignorée : 'country' vide dans {fn}")
+                continue
+
 
             # Mémorise les pays inconnus
             if country not in pays_dict and country not in new_pays:
@@ -251,11 +291,22 @@ def run_etl():
         mal = detect_maladie(fn)
         df_raw = extract(path)
         df = transform(df_raw, cur)
+        if "country" not in df.columns or df.empty:
+            print(f"⚠️ Fichier {fn} ignoré car pas de colonne 'country' ou DataFrame vide après filtrage.")
+            continue
+
+        df = df[df["country"].notna()]  # ← ajoute cette ligne ici aussi !
+
         id_maladie = maladie_dict[mal]
 
         for _, r in df.iterrows():
             country = r["country"]
             id_pays = pays_dict[country]
+            if pd.isna(country):
+                print(f"❌ Ligne ignorée : 'country' vide dans {fn}")
+                continue
+            id_pays = pays_dict[country]
+
 
             # Upsert region (1 seule fois par nom)
             if country not in region_dict and country not in new_regions:
@@ -314,6 +365,7 @@ def run_etl():
     conn.commit()
     cur.close()
     conn.close()
+    print(f"📊 Bilan : {nb_fichiers_traite} fichiers traités, {nb_fichiers_ignores} fichiers ignorés.")
     print("✅ ETL terminé avec traitement optimisé !")
 
 if __name__ == "__main__":
