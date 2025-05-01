@@ -17,7 +17,8 @@ lint:
   image: python:3.9
   script:
     - pip install pylint
-    - pylint src/
+    - pylint ETL_OMS.py ETL_OMS_OPERATIONNEL.py
+
   allow_failure: false
 
 test:
