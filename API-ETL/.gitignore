@@ -1,0 +1,16 @@
+# Dossiers inutiles
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Environnement virtuel
+.venv/
+venv/
+
+# Données uploadées
+DATASETS/
+
+# Temporaire
+*.log
+*.tmp

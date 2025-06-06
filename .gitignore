@@ -1,0 +1,21 @@
+# Fichiers volumineux
+data_sources/
+generated_data/
+models/
+export/
+
+# Environnement virtuel
+.venv/
+__pycache__/
+*.pyc
+
+# Node
+node_modules/
+
+# Fichiers de données générés
+*.pkl
+DATASETS/
+
+# Fichiers système
+.DS_Store
+Thumbs.db

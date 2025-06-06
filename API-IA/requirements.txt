@@ -1,0 +1,11 @@
+flask
+pandas
+joblib
+transformers
+torch
+safetensors
+openai
+scikit-learn
+psycopg2-binary
+fastapi
+uvicorn

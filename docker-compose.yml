@@ -1,0 +1,40 @@
+services:
+
+  api_etl:
+    build:
+      context: ./API-ETL
+    container_name: api_etl
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./API-ETL/DATASETS:/app/DATASETS
+    depends_on:
+      - db
+
+  api_ia:
+    build:
+      context: ./API-IA
+    container_name: api_ia
+    ports:
+      - "5001:5001"
+    volumes:
+      - ./API-IA/generated_data:/app/generated_data
+      - ./API-IA/models:/app/models
+      - ./API-IA/data_sources:/app/data_sources
+    depends_on:
+      - db
+
+  db:
+    image: postgres:13
+    container_name: postgres_db
+    environment:
+      POSTGRES_DB: pandemie
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:

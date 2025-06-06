@@ -1,0 +1,5 @@
+docker rm etl-api-container (Seulement si le conteneur est déjà présent)
+docker build --no-cache -t etl-api .
+docker run -p 5000:5000 --name etl-api-container etl-api
+
+docker start etl-api-container

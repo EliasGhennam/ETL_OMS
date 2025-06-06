@@ -1,0 +1,18 @@
+# Dossiers inutiles
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Environnement virtuel
+.venv/
+venv/
+
+# Données IA
+generated_data/
+models/
+data_sources/
+
+# Temporaire
+*.log
+*.tmp

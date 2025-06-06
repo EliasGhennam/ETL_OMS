@@ -1,0 +1,13 @@
+name: New rule
+version: 0.0.1
+schema: v1
+rules:
+  - Always give concise responses
+
+output:
+  - "I will always give concise responses."
+  - "I will keep my responses short and to the point."
+  - "I will provide brief answers."
+  - "I will ensure my responses are concise."
+  - "I will focus on brevity in my responses."
+  - "I will aim for clarity and conciseness."

@@ -1,0 +1,11 @@
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.venv/
+venv/
+generated_data/
+models/
+data_sources/
+*.log
+*.tmp

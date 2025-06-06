@@ -1,0 +1,30 @@
+# ENV & cache
+.venv/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Modèles IA et fichiers volumineux
+*.pt
+*.pkl
+*.csv
+*.xlsx
+*.log
+
+# Données sources et résultats
+DATASETS/
+data_sources/
+export/
+generated_data/
+models/
+comparaison_data_predictions.csv
+
+# Node/npm si inutilisé
+node_modules/
+package-lock.json
+
+# Autres inutiles
+.DS_Store
+*.ipynb
+.env

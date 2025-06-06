@@ -1,0 +1,116 @@
+stages:
+  - lint
+  - test
+  - analyze
+  - package
+  - docker
+
+variables:
+  SONAR_USER_HOME: "${CI_PROJECT_DIR}/.sonar"
+  GIT_DEPTH: "0"
+  PACKAGE_NAME: "etl_api"
+  PACKAGE_VERSION: "1.0.0"
+  IMAGE_NAME: "$CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG"
+
+######################
+# LINT (Pylint)
+######################
+lint:
+  stage: lint
+  image: python:3.11
+  script:
+    - pip install pylint
+    - pylint ETL_API.py ETL_OMS_OPERATIONNEL.py || true
+  allow_failure: false
+
+######################
+# TEST (pytest)
+######################
+test:
+  stage: test
+  image: python:3.11
+  script:
+    - pip install pytest
+    - pytest tests/
+  allow_failure: false
+
+######################
+# ANALYZE (SonarCloud)
+######################
+sonarcloud:
+  stage: analyze
+  image:
+    name: sonarsource/sonar-scanner-cli:latest
+    entrypoint: [""]
+  script:
+    - sonar-scanner
+  only:
+    - merge_requests
+    - master
+    - develop
+  variables:
+    SONAR_TOKEN: $SONAR_TOKEN
+    SONAR_HOST_URL: $SONAR_HOST_URL
+
+######################
+# ANALYZE (Trivy Scan)
+######################
+trivy_scan:
+  stage: analyze
+  image: docker:stable
+  services:
+    - docker:dind
+  variables:
+    DOCKER_HOST: tcp://docker:2375/
+    DOCKER_TLS_CERTDIR: ""
+    TRIVY_CACHE_DIR: "/root/.cache/trivy"
+  before_script:
+    - apk add --no-cache curl
+    - curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sh -s -- -b /usr/local/bin
+  script:
+    - docker build -t $IMAGE_NAME .
+    - trivy image --timeout 10m --scanners vuln --exit-code 0 --severity HIGH $IMAGE_NAME
+    - trivy image --timeout 10m --scanners vuln --exit-code 1 --severity CRITICAL $IMAGE_NAME
+  cache:
+    key: trivy
+    paths:
+      - /root/.cache/trivy
+  artifacts:
+    paths:
+      - gl-container-scanning-report.json
+    reports:
+      container_scanning: gl-container-scanning-report.json
+  allow_failure: true
+
+######################
+# PACKAGE (si applicable)
+######################
+package:
+  stage: package
+  image: python:3.11
+  script:
+    - pip install setuptools wheel
+    - python setup.py sdist bdist_wheel || echo "No setup.py found, skipping."
+  artifacts:
+    paths:
+      - dist/*.whl
+      - dist/*.tar.gz
+  allow_failure: true
+
+######################
+# DOCKER BUILD + PUSH
+######################
+docker_build:
+  stage: docker
+  image: docker:stable
+  services:
+    - docker:dind
+  variables:
+    DOCKER_HOST: tcp://docker:2375/
+    DOCKER_TLS_CERTDIR: ""
+  script:
+    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" "$CI_REGISTRY"
+    - docker build -t $IMAGE_NAME .
+    - docker push $IMAGE_NAME
+  only:
+    - master

@@ -1,0 +1,86 @@
+from flask import Flask, request, jsonify
+import os
+from werkzeug.utils import secure_filename
+from ETL_OMS_OPERATIONNEL import run_etl
+from build_dataset import build_training_data
+from train_ia_lstm import main as train_lstm_model
+from forecast_ia_lstm import generate_forecast
+
+
+UPLOAD_FOLDER = 'DATASETS'
+ALLOWED_EXTENSIONS = {'csv', 'json', 'xlsx'}
+
+app = Flask(__name__)
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+
+# Vérifie l'extension du fichier
+def allowed_file(filename):
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+@app.route('/ping', methods=['GET'])
+def ping():
+    return jsonify({"message": "pong"}), 200
+
+
+# Endpoint pour uploader un fichier
+@app.route('/upload-etl', methods=['POST'])
+def upload_file():
+    if 'file' not in request.files:
+        return jsonify({'status': 'error', 'message': 'Aucun fichier reçu'}), 400
+
+    file = request.files['file']
+    if file.filename == '':
+        return jsonify({'status': 'error', 'message': 'Nom de fichier vide'}), 400
+
+    if file and allowed_file(file.filename):
+        filename = secure_filename(file.filename)
+        save_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+        file.save(save_path)
+        return jsonify({'status': 'success', 'message': f'Fichier {filename} enregistré'}), 200
+
+    return jsonify({'status': 'error', 'message': 'Extension de fichier non autorisée'}), 400
+
+# Lancement du traitement ETL
+@app.route('/run_etl', methods=['POST'])
+def run_etl_route():
+    try:
+        run_etl()
+        return jsonify({"status": "success", "message": "ETL terminé avec succès"}), 200
+    except Exception as e:
+        return jsonify({"status": "error", "message": str(e)}), 500
+
+# Création du cache IA
+@app.route("/etl/cache", methods=["POST"])
+def build_cache():
+    try:
+        result = build_training_data()
+        return jsonify({"status": "success", "details": result})
+    except Exception as e:
+        return jsonify({"status": "error", "message": str(e)}), 500
+
+# Entraînement du modèle
+@app.route("/etl/train", methods=["POST"])
+def train_lstm():
+    try:
+        result = train_lstm_model()
+        return jsonify({"status": "success", "details": "Modèles entraînés"})
+    except Exception as e:
+        return jsonify({"status": "error", "message": str(e)}), 500
+
+# Génération de prédictions
+@app.route("/etl/forecast", methods=["POST"])
+def forecast_lstm():
+    try:
+        result = generate_forecast()
+        return jsonify({"status": "success", "details": result})
+    except Exception as e:
+        return jsonify({"status": "error", "message": str(e)}), 500
+
+@app.route('/predict_lstm', methods=['POST'])
+def predict_lstm():
+    result = generate_forecast()
+    return jsonify({"message": result})
+
+
+if __name__ == '__main__':
+    app.run(host="0.0.0.0", port=5000)

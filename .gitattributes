@@ -1,0 +1,2 @@
+data_sources/* filter=lfs diff=lfs merge=lfs -text
+generated_data/* filter=lfs diff=lfs merge=lfs -text
