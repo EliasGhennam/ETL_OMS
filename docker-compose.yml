@@ -24,6 +24,27 @@ services:
     depends_on:
       - db
 
+  api_java:
+    build:
+      context: ./API-JAVA/API-Pandemie
+    container_name: api_java
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+
+  front:
+    build:
+      context: ./FRONT/MSPR_Front
+      dockerfile: Dockerfile
+    container_name: etl-front
+    ports:
+      - "4200:80"
+    depends_on:
+      - api_java
+
+
+
   db:
     image: postgres:13
     container_name: postgres_db
