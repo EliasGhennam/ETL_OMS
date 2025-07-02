@@ -6,8 +6,6 @@ from datetime import timedelta
 import os
 
 def generate_forecast():
-    main()
-
     # Définir les features utilisées
     features = [
         "cas_j-1", "cas_j-2", "cas_j-3",
@@ -50,7 +48,7 @@ def generate_forecast():
             return out.squeeze()
 
     model = LSTMModel(input_size=len(features))
-    model.load_state_dict(torch.load("models/model_lstm.pt"))
+    model.load_state_dict(torch.load("models/model_lstm.pt", map_location=torch.device('cpu')))
     model.eval()
 
     # Lancer les prédictions pour 365 jours
@@ -134,9 +132,14 @@ def generate_forecast():
     df_all.to_csv("generated_data/statistique_predict_lstm.csv", sep=",", index=False)
     print("✅ Fichier généré avec colonnes source=historique ou prediction")
 
-    return "Fichier statistique_predict_lstm.csv généré avec succès"
-
-    from forecast_ia_lstm import generate_forecast
+    # Préparer un format JSON pour le front (ex: date et nouveau_cas)
+    # On ne retourne que les prédictions (source == 'prediction')
+    df_pred = df_all[df_all['source'] == 'prediction'].copy()
+    # On ne garde que les colonnes utiles pour le chart
+    df_pred = df_pred[['date', 'nouveau_cas']]
+    df_pred['date'] = df_pred['date'].astype(str)
+    result = df_pred.rename(columns={'nouveau_cas': 'valeur'}).to_dict(orient='records')
+    return result
 
 # Permet d'appeler le script à la fois en CLI et comme module
 if __name__ == "__main__":

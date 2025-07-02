@@ -1,0 +1,109 @@
+name: CI/CD ETL_OMS
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build-test-lint:
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:13
+        env:
+          POSTGRES_DB: pandemie
+          POSTGRES_USER: user
+          POSTGRES_PASSWORD: password
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          submodules: true
+
+      # =========================
+      # Python (API-IA uniquement)
+      # =========================
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.10"
+
+      - name: Install Python dependencies
+        run: |
+          pip install -r API-IA/requirements.txt
+
+      - name: Install pytest
+        run: pip install pytest
+
+      - name: Lint Python (API-IA)
+        run: |
+          pip install flake8
+          flake8 API-IA
+
+      - name: Test Python (API-IA)
+        run: |
+          cd API-IA && pytest
+
+      # =========================
+      # Java (API-JAVA)
+      # =========================
+      - name: Set up Java
+        uses: actions/setup-java@v3
+        with:
+          distribution: "temurin"
+          java-version: "17"
+
+      - name: Fix Maven wrapper permissions
+        run: chmod +x API-JAVA/API-Pandemie/mvnw
+
+      - name: Build Java
+        run: |
+          cd API-JAVA/API-Pandemie
+          ./mvnw clean install -DskipTests
+
+      # =========================
+      # Node.js (Next.js/Angular)
+      # =========================
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: "18"
+
+      - name: Install Node dependencies (Next.js)
+        run: |
+          cd FRONT/front_next && npm install
+
+      - name: Lint Next.js
+        run: |
+          cd FRONT/front_next && npm run lint
+
+      - name: Build Next.js
+        run: |
+          cd FRONT/front_next && npm run build
+
+      # =========================
+      # Docker Compose (Intégration)
+      # =========================
+      - name: Build and up all services with Docker Compose
+        run: |
+          docker-compose up --build -d
+          sleep 30
+          docker-compose ps
+
+      # =========================
+      # (Déploiement à personnaliser)
+      # =========================
+      # - name: Deploy
+      #   run: |
+      #     echo "Ajoute ici ton étape de déploiement (Docker Hub, SSH, etc.)"

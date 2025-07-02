@@ -1,0 +1,71 @@
+{
+  "home": {
+    "title": "The future of health at your fingertips",
+    "subtitle": "Dive into a comprehensive tool to access a wealth of unrivaled information.",
+    "cta_stats": "View Statistics",
+    "cta_about": "About",
+    "carousel": ["View", "Predict", "Process", "Store", "Analyze"],
+    "carousel_prefix": "Use our tool to",
+    "carousel_suffix": "data related to epidemics!"
+  },
+  "menu": {
+    "visualiser": "View",
+    "inserer": "Insert data into ETL",
+    "traiter": "Process",
+    "prediction": "AI Prediction",
+    "apropos": "About"
+  },
+  "statistics": {
+    "title": "Data Visualization",
+    "description": "Explore interactive statistics on pandemics.",
+    "forbidden": "The statistics visualization page is not accessible from Switzerland.",
+    "forbiddenTitle": "Access Denied",
+    "filter_title": "Disease Statistics",
+    "filter_description": "Case trends over the last 6 months",
+    "country_label": "Country",
+    "country_placeholder": "Select a country",
+    "disease_label": "Disease",
+    "disease_placeholder": "Select a disease",
+    "loading": "Loading...",
+    "no_data": "No data available for the current selections.",
+    "main_chart_title": "New Deaths and Cases",
+    "main_chart_description": "Daily evolution of new cases and deaths",
+    "total_mort_title": "Total Deaths",
+    "total_mort_description": "Cumulative evolution of deaths",
+    "total_cas_title": "Total Cases",
+    "total_cas_description": "Cumulative evolution of cases",
+    "footer_realtime": "Real-time analysis",
+    "footer_daily_update": "Data updated daily",
+    "nouveau_mort_label": "New deaths",
+    "nouveau_cas_label": "New cases",
+    "total_mort_label": "Total deaths",
+    "total_cas_label": "Total cases"
+  },
+  "traiter": {
+    "title": "Data Processing",
+    "description": "Submit your data for processing and analysis.",
+    "dropzone": "Drag and drop files here or click to select.",
+    "pendingFiles": "Pending files:",
+    "processing": "Processing...",
+    "startProcessing": "Start Processing",
+    "pingApi": "Ping API",
+    "liveLogs": "Live Logs"
+  },
+  "prediction": {
+    "title": "AI Prediction",
+    "description": "Get predictions powered by artificial intelligence on pandemic evolution.",
+    "step1Title": "Step 1: Upload Data",
+    "step1Desc": "Upload data files (CSV, XLSX) for training.",
+    "step2Title": "Step 2: Prepare Data",
+    "step2Desc": "Build and cache the dataset for training.",
+    "step2Btn": "Prepare",
+    "step3Title": "Step 3: Train Model",
+    "step3Desc": "Train the LSTM model on the prepared data.",
+    "step3Btn": "Train",
+    "step4Title": "Step 4: Generate Prediction",
+    "step4Desc": "Use the trained model to generate a prediction.",
+    "step4Btn": "Predict",
+    "uploadBtn": "Upload Files",
+    "resultsTitle": "Prediction Results"
+  }
+} 

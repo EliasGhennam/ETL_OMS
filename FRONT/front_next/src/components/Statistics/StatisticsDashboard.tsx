@@ -24,6 +24,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { useTranslations } from "next-intl";
 
 interface DataPoint {
   date: string;
@@ -71,6 +72,7 @@ export function StatisticsDashboard() {
   const [totalMortData, setTotalMortData] = useState<DataPoint[]>([]);
   const [totalCasData, setTotalCasData] = useState<DataPoint[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const t = useTranslations("statistics");
 
   useEffect(() => {
     fetchPays();
@@ -219,18 +221,16 @@ export function StatisticsDashboard() {
       {/* Filter Section */}
       <Card>
         <CardHeader>
-          <CardTitle>Statistiques des Maladies</CardTitle>
-          <CardDescription>
-            Évolution des cas sur les 6 derniers mois
-          </CardDescription>
+          <CardTitle>{t("filter_title")}</CardTitle>
+          <CardDescription>{t("filter_description")}</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-2">
-              <label className="text-sm font-medium">Pays</label>
+              <label className="text-sm font-medium">{t("country_label")}</label>
               <Select value={selectedPays} onValueChange={setSelectedPays}>
                 <SelectTrigger>
-                  <SelectValue placeholder="Sélectionner un pays" />
+                  <SelectValue placeholder={t("country_placeholder")} />
                 </SelectTrigger>
                 <SelectContent>
                   {pays.map((p) => (
@@ -243,10 +243,10 @@ export function StatisticsDashboard() {
             </div>
 
             <div className="space-y-2">
-              <label className="text-sm font-medium">Maladie</label>
+              <label className="text-sm font-medium">{t("disease_label")}</label>
               <Select value={selectedMaladie} onValueChange={setSelectedMaladie}>
                 <SelectTrigger>
-                  <SelectValue placeholder="Sélectionner une maladie" />
+                  <SelectValue placeholder={t("disease_placeholder")} />
                 </SelectTrigger>
                 <SelectContent>
                   {maladies.map((m) => (
@@ -264,19 +264,19 @@ export function StatisticsDashboard() {
       {/* Chart Section */}
       {isLoading ? (
         <div className="flex items-center justify-center h-[400px]">
-          <div className="text-muted-foreground">Chargement...</div>
+          <div className="text-muted-foreground">{t("loading")}</div>
         </div>
       ) : combinedNouveauData.length === 0 && totalMortData.length === 0 && totalCasData.length === 0 ? (
         <div className="flex items-center justify-center h-[400px] text-muted-foreground">
-          Aucune donnée disponible pour les sélections actuelles.
+          {t("no_data")}
         </div>
       ) : (
         <div className="grid gap-8">
           {/* Main Chart: Nouveau Morts and Nouveau Cas */}
           <Card className="w-full">
             <CardHeader>
-              <CardTitle>Nouveaux morts et cas</CardTitle>
-              <CardDescription>Évolution des nouveaux cas et décès par jour</CardDescription>
+              <CardTitle>{t("main_chart_title")}</CardTitle>
+              <CardDescription>{t("main_chart_description")}</CardDescription>
             </CardHeader>
             <CardContent>
               <div className="h-[400px] w-full">
@@ -341,8 +341,8 @@ export function StatisticsDashboard() {
             {/* Total Morts Chart */}
             <Card>
               <CardHeader>
-                <CardTitle>Total des morts</CardTitle>
-                <CardDescription>Évolution cumulée des décès</CardDescription>
+                <CardTitle>{t("total_mort_title")}</CardTitle>
+                <CardDescription>{t("total_mort_description")}</CardDescription>
               </CardHeader>
               <CardContent>
                 <div className="h-[250px] w-full">
@@ -395,8 +395,8 @@ export function StatisticsDashboard() {
             {/* Total Cas Chart */}
             <Card>
               <CardHeader>
-                <CardTitle>Total des cas</CardTitle>
-                <CardDescription>Évolution cumulée des cas</CardDescription>
+                <CardTitle>{t("total_cas_title")}</CardTitle>
+                <CardDescription>{t("total_cas_description")}</CardDescription>
               </CardHeader>
               <CardContent>
                 <div className="h-[250px] w-full">
@@ -454,10 +454,10 @@ export function StatisticsDashboard() {
         <div className="flex w-full items-start gap-2 text-sm">
           <div className="grid gap-2">
             <div className="flex items-center gap-2 leading-none font-medium">
-              Analyse en temps réel <TrendingUp className="h-4 w-4" />
+              {t("footer_realtime")} <TrendingUp className="h-4 w-4" />
             </div>
             <div className="text-muted-foreground flex items-center gap-2 leading-none">
-              Données mises à jour quotidiennement
+              {t("footer_daily_update")}
             </div>
           </div>
         </div>

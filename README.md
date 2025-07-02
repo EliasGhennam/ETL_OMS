@@ -135,15 +135,39 @@ ng serve
 
 ---
 
-## 🧠 Auteur
+## 🧠 Auteurs
 
-**Développeur IA / Données : Elias GHENNAM**
+**Développeur IA / DATA/ BDD/ Front : Elias GHENNAM**
 
 - ✉️ eliasghennam707@gmail.com  
 - 🔗 [GitHub](https://github.com/EliasGhennam)  
 - 💼 [LinkedIn](https://www.linkedin.com/in/elias-ghennam/)
 
 ---
+
+**Développeur API Java/ BDD/ Front : Adnan MAHBOUBI**
+
+- ✉️ adnan.mahboubi03@gmail.com  
+- 🔗 [GitHub](https://github.com/A2nan)  
+- 💼 [LinkedIn](https://www.linkedin.com/in/adnan-mahboubi-25359424b/)
+
+---
+
+**Développeur API/ Front : Moumine KONE**
+
+- ✉️ moumine.kone@ecoles-epsi.net  
+- 💼 [LinkedIn](https://www.linkedin.com/in/moumine-kone/)
+
+---
+
+**Développeur Fullstack : Karim BIH**
+
+- ✉️ karim.bih@ecoles-epsi.net 
+- 💼 [LinkedIn](https://www.linkedin.com/in/karim-bih-29b079260/)
+
+---
+
+
 
 ## 📝 Licence
 

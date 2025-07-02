@@ -184,7 +184,7 @@ def prepare_temp_csv(rows):
 def copy_into_temp_statistique(cur=None, conn=None):
     close_after = False
 
-    # Si aucun curseur ou connexion n’a été fourni, on ouvre manuellement
+    # Si aucun curseur ou connexion n'a été fourni, on ouvre manuellement
     if cur is None or conn is None:
         conn = connect_db()
         cur = conn.cursor()
@@ -251,11 +251,9 @@ def copy_into_temp_statistique(cur=None, conn=None):
         cur.close()
         conn.close()
 
-def run_etl():
-
+def run_etl(filename=None, progress_callback=None):
     nb_fichiers_traite = 0
     nb_fichiers_ignores = 0
-
 
     conn = connect_db()
     conn.autocommit = False  # On gère la transaction manuellement
@@ -275,9 +273,16 @@ def run_etl():
     new_regions = {}
     latlong_updates = {}  # ✅ On le déclare ici une seule fois pour tout le run
 
-    for fn in os.listdir(datasets_folder):
-        if not fn.lower().endswith((".csv", ".json")):
-            continue
+    # Détermine la liste des fichiers à traiter
+    if filename:
+        files_to_process = [filename]
+    else:
+        files_to_process = [fn for fn in os.listdir(datasets_folder) if fn.lower().endswith((".csv", ".json"))]
+
+    total_files = len(files_to_process)
+    for idx, fn in enumerate(files_to_process, 1):
+        if progress_callback:
+            progress_callback(idx, total_files)
         path = os.path.join(datasets_folder, fn)
         mal = detect_maladie(fn)
         print(f"📄 {fn} → {mal}")
@@ -287,29 +292,17 @@ def run_etl():
             print(f"⚠️ Fichier {fn} ignoré car pas de colonne 'country' ou DataFrame vide après filtrage.")
             nb_fichiers_ignores += 1
             continue
-
         nb_fichiers_traite += 1
-
-
-        # ➕ Ajoute cette sécurité :
         df = df[df["country"].notna()]
-
-
-        # Upsert maladie
         if mal not in maladie_dict:
             cur.execute("INSERT INTO maladie(nom_maladie) VALUES(%s) RETURNING id_maladie", (mal,))
             maladie_dict[mal] = cur.fetchone()[0]
-
         id_maladie = maladie_dict[mal]
-
         for _, r in df.iterrows():
             country = r["country"]
             if pd.isna(country):
                 print(f"❌ Ligne ignorée : 'country' vide dans {fn}")
                 continue
-
-
-            # Mémorise les pays inconnus
             if country not in pays_dict and country not in new_pays:
                 new_pays[country] = None
 
@@ -320,9 +313,7 @@ def run_etl():
     pays_dict.update(new_pays)
 
     # Relecture fichier + traitement final avec pays/régions
-    for fn in os.listdir(datasets_folder):
-        if not fn.lower().endswith((".csv", ".json")):
-            continue
+    for fn in files_to_process:
         path = os.path.join(datasets_folder, fn)
         mal = detect_maladie(fn)
         df_raw = extract(path)
@@ -330,11 +321,8 @@ def run_etl():
         if "country" not in df.columns or df.empty:
             print(f"⚠️ Fichier {fn} ignoré car pas de colonne 'country' ou DataFrame vide après filtrage.")
             continue
-
-        df = df[df["country"].notna()]  # ← ajoute cette ligne ici aussi !
-
+        df = df[df["country"].notna()]
         id_maladie = maladie_dict[mal]
-
         for _, r in df.iterrows():
             country = r["country"]
             id_pays = pays_dict[country]
@@ -342,53 +330,38 @@ def run_etl():
                 print(f"❌ Ligne ignorée : 'country' vide dans {fn}")
                 continue
             id_pays = pays_dict[country]
-
-
-            # Upsert region (1 seule fois par nom)
             if country not in region_dict and country not in new_regions:
                 cur.execute(
                     "INSERT INTO region(nom_region, id_pays) VALUES(%s, %s) RETURNING id_region",
                     (country, id_pays)
                 )
                 new_regions[country] = cur.fetchone()[0]
-
             id_region = region_dict.get(country) or new_regions[country]
-
-            # maj lat/long
             if pd.notna(r["latitude"]) and pd.notna(r["longitude"]) and id_region not in latlong_updates:
                 latlong_updates[id_region] = (r["latitude"], r["longitude"])
-
-            # valeurs
             nm = int(r["new_deaths"]) if not pd.isna(r["new_deaths"]) else 0
             nc = int(r["new_cases"]) if not pd.isna(r["new_cases"]) else 0
             tm = int(r["deaths"]) if not pd.isna(r["deaths"]) else 0
             tc = int(r["confirmed"]) if not pd.isna(r["confirmed"]) else 0
-
-            # 🧠 Facteurs externes (à adapter selon le nom des colonnes OWID)
             def safe_float(value):
                 try:
                     return float(value)
                 except:
                     return 0.0
-
             def safe_int(value):
                 try:
                     return int(float(value))
                 except:
                     return 0
-
             stringency = safe_float(r.get("stringency_index"))
             vaccinated = safe_int(r.get("people_vaccinated"))
             beds = safe_float(r.get("hospital_beds_per_thousand"))
             density = safe_float(r.get("population_density"))
-
-
             all_rows.append((
                 id_maladie, id_region, r["date"].date(),
                 nm, nc, tm, tc,
                 stringency, vaccinated, beds, density
             ))
-
 
     region_dict.update(new_regions)
     cur.execute("SELECT id_region, nom_region FROM region")

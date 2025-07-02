@@ -9,4 +9,4 @@ psycopg2-binary
 fastapi
 uvicorn
 flask
-flask-cors
+flask-cors 

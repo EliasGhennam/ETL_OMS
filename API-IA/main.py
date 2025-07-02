@@ -1,15 +1,17 @@
 import os
 import pandas as pd
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, send_from_directory
 from build_dataset import build_training_data
 from train_ia_lstm import main as train_lstm_model
 from forecast_ia_lstm import generate_forecast
 from werkzeug.utils import secure_filename
+from flask_cors import CORS
 
 UPLOAD_FOLDER = 'data_sources'
 ALLOWED_EXTENSIONS = {'csv', 'xlsx'}
 
 app = Flask(__name__)
+CORS(app, origins=["http://localhost:3000"])
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 def allowed_file(filename):
@@ -50,23 +52,33 @@ def predict_lstm():
     result = generate_forecast()
     return jsonify({"message": result})
 
-@app.route('/upload-reference', methods=['POST'])
-def upload_reference_data():
-    if 'file' not in request.files:
+@app.route('/upload-data', methods=['POST'])
+def upload_data():
+    if 'files' not in request.files:
         return jsonify({'status': 'error', 'message': 'Aucun fichier reçu'}), 400
 
-    file = request.files['file']
+    files = request.files.getlist('files')
 
-    if file.filename == '':
-        return jsonify({'status': 'error', 'message': 'Nom de fichier vide'}), 400
+    if not files or all(f.filename == '' for f in files):
+        return jsonify({'status': 'error', 'message': 'Aucun fichier sélectionné'}), 400
 
-    if file and allowed_file(file.filename):
-        # Lire directement le contenu du fichier
-        df = pd.read_csv(file)  # ou pd.read_excel(file) selon type
-        # Traitement ici sans sauvegarde
-        return jsonify({'status': 'success', 'message': f'Fichier {file.filename} traité en mémoire'}), 200
+    saved_files = []
+    for file in files:
+        if file and allowed_file(file.filename):
+            filename = secure_filename(file.filename)
+            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+            saved_files.append(filename)
 
-    return jsonify({'status': 'error', 'message': 'Extension non autorisée'}), 400
+    if not saved_files:
+        return jsonify({'status': 'error', 'message': 'Aucun fichier valide ou extension non autorisée'}), 400
+
+    return jsonify({'status': 'success', 'message': f'{len(saved_files)} fichier(s) uploadé(s) avec succès', 'files': saved_files}), 200
+
+@app.route('/download-prediction', methods=['GET'])
+def download_prediction():
+    file_path = 'generated_data'
+    filename = 'statistique_predict_lstm.csv'
+    return send_from_directory(file_path, filename, as_attachment=True)
 
 if __name__ == '__main__':
     app.run(host="0.0.0.0", port=5001)

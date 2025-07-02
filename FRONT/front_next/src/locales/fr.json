@@ -1,0 +1,71 @@
+{
+  "home": {
+    "title": "Le futur de la santé à portée de main",
+    "subtitle": "Plongez au cœur d'un outil complet pour obtenir une richesse d'informations inégalable.",
+    "cta_stats": "Voir les Statistiques",
+    "cta_about": "À propos",
+    "carousel": ["Visualiser", "Prédire", "Traiter", "Stocker", "Analyser"],
+    "carousel_prefix": "Utilisez notre outil pour",
+    "carousel_suffix": "des données relatives aux épidémies !"
+  },
+  "menu": {
+    "visualiser": "Visualiser",
+    "inserer": "Insérer des données dans l'ETL",
+    "traiter": "Traiter",
+    "prediction": "Prédiction IA",
+    "apropos": "À propos"
+  },
+  "statistics": {
+    "title": "Visualisation des Données",
+    "description": "Explorez les statistiques interactives sur les pandémies.",
+    "forbidden": "La page de visualisation des statistiques n'est pas accessible depuis la Suisse.",
+    "forbiddenTitle": "Accès non autorisé",
+    "filter_title": "Statistiques des Maladies",
+    "filter_description": "Évolution des cas sur les 6 derniers mois",
+    "country_label": "Pays",
+    "country_placeholder": "Sélectionner un pays",
+    "disease_label": "Maladie",
+    "disease_placeholder": "Sélectionner une maladie",
+    "loading": "Chargement...",
+    "no_data": "Aucune donnée disponible pour les sélections actuelles.",
+    "main_chart_title": "Nouveaux morts et cas",
+    "main_chart_description": "Évolution des nouveaux cas et décès par jour",
+    "total_mort_title": "Total des morts",
+    "total_mort_description": "Évolution cumulée des décès",
+    "total_cas_title": "Total des cas",
+    "total_cas_description": "Évolution cumulée des cas",
+    "footer_realtime": "Analyse en temps réel",
+    "footer_daily_update": "Données mises à jour quotidiennement",
+    "nouveau_mort_label": "Nouveaux morts",
+    "nouveau_cas_label": "Nouveaux cas",
+    "total_mort_label": "Total des morts",
+    "total_cas_label": "Total des cas"
+  },
+  "traiter": {
+    "title": "Traitement des Données",
+    "description": "Soumettez vos données pour traitement et analyse.",
+    "dropzone": "Glissez-déposez des fichiers ici ou cliquez pour sélectionner.",
+    "pendingFiles": "Fichiers en attente :",
+    "processing": "Traitement...",
+    "startProcessing": "Lancer le Traitement",
+    "pingApi": "Ping API",
+    "liveLogs": "Logs en direct"
+  },
+  "prediction": {
+    "title": "Prédiction IA",
+    "description": "Obtenez des prédictions grâce à l'intelligence artificielle sur l'évolution des pandémies.",
+    "step1Title": "Étape 1 : Uploader les Données",
+    "step1Desc": "Chargez les fichiers de données (CSV, XLSX) pour l'entraînement.",
+    "step2Title": "Étape 2 : Préparer les Données",
+    "step2Desc": "Construire et mettre en cache le jeu de données pour l'entraînement.",
+    "step2Btn": "Préparer",
+    "step3Title": "Étape 3 : Entraîner le Modèle",
+    "step3Desc": "Entraîner le modèle LSTM sur les données préparées.",
+    "step3Btn": "Entraîner",
+    "step4Title": "Étape 4 : Générer la Prédiction",
+    "step4Desc": "Utiliser le modèle entraîné pour générer une prédiction.",
+    "step4Btn": "Prédire",
+    "uploadBtn": "Uploader les Fichiers",
+    "resultsTitle": "Résultats de la Prédiction"
+  }
+} 

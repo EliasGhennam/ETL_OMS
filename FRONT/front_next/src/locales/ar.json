@@ -1,0 +1,71 @@
+{
+  "home": {
+    "title": "مستقبل الصحة بين يديك",
+    "subtitle": "استكشف أداة شاملة للحصول على ثروة من المعلومات التي لا مثيل لها.",
+    "cta_stats": "عرض الإحصائيات",
+    "cta_about": "حول",
+    "carousel": ["عرض", "تنبؤ", "معالجة", "تخزين", "تحليل"],
+    "carousel_prefix": "استخدم أداتنا لـ",
+    "carousel_suffix": "البيانات المتعلقة بالأوبئة!"
+  },
+  "menu": {
+    "visualiser": "عرض",
+    "inserer": "إدراج بيانات في ETL",
+    "traiter": "معالجة",
+    "prediction": "تنبؤ الذكاء الاصطناعي",
+    "apropos": "حول"
+  },
+  "statistics": {
+    "title": "عرض البيانات",
+    "description": "استكشف الإحصائيات التفاعلية حول الأوبئة.",
+    "forbidden": "صفحة عرض الإحصائيات غير متاحة من سويسرا.",
+    "forbiddenTitle": "الدخول غير مسموح",
+    "filter_title": "إحصائيات الأمراض",
+    "filter_description": "اتجاهات الحالات في آخر 6 أشهر",
+    "country_label": "الدولة",
+    "country_placeholder": "اختر دولة",
+    "disease_label": "المرض",
+    "disease_placeholder": "اختر مرضًا",
+    "loading": "جارٍ التحميل...",
+    "no_data": "لا توجد بيانات متاحة للاختيارات الحالية.",
+    "main_chart_title": "الوفيات والحالات الجديدة",
+    "main_chart_description": "تطور الحالات والوفيات الجديدة يوميًا",
+    "total_mort_title": "إجمالي الوفيات",
+    "total_mort_description": "التطور التراكمي للوفيات",
+    "total_cas_title": "إجمالي الحالات",
+    "total_cas_description": "التطور التراكمي للحالات",
+    "footer_realtime": "تحليل في الوقت الحقيقي",
+    "footer_daily_update": "يتم تحديث البيانات يوميًا",
+    "nouveau_mort_label": "وفيات جديدة",
+    "nouveau_cas_label": "حالات جديدة",
+    "total_mort_label": "إجمالي الوفيات",
+    "total_cas_label": "إجمالي الحالات"
+  },
+  "traiter": {
+    "title": "معالجة البيانات",
+    "description": "أرسل بياناتك للمعالجة والتحليل.",
+    "dropzone": "اسحب الملفات هنا أو انقر للاختيار.",
+    "pendingFiles": "الملفات المعلقة:",
+    "processing": "جارٍ المعالجة...",
+    "startProcessing": "بدء المعالجة",
+    "pingApi": "Ping API",
+    "liveLogs": "سجلات مباشرة"
+  },
+  "prediction": {
+    "title": "تنبؤ الذكاء الاصطناعي",
+    "description": "احصل على تنبؤات مدعومة بالذكاء الاصطناعي حول تطور الأوبئة.",
+    "step1Title": "الخطوة 1: رفع البيانات",
+    "step1Desc": "قم برفع ملفات البيانات (CSV، XLSX) للتدريب.",
+    "step2Title": "الخطوة 2: تجهيز البيانات",
+    "step2Desc": "قم ببناء وتخزين مجموعة البيانات للتدريب.",
+    "step2Btn": "تجهيز",
+    "step3Title": "الخطوة 3: تدريب النموذج",
+    "step3Desc": "قم بتدريب نموذج LSTM على البيانات المُجهزة.",
+    "step3Btn": "تدريب",
+    "step4Title": "الخطوة 4: توليد التنبؤ",
+    "step4Desc": "استخدم النموذج المدرب لتوليد التنبؤ.",
+    "step4Btn": "تنبؤ",
+    "uploadBtn": "رفع الملفات",
+    "resultsTitle": "نتائج التنبؤ"
+  }
+} 

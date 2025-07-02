@@ -1,7 +1,7 @@
 "use client";
 
 import { Canvas, useFrame } from "@react-three/fiber";
-import { OrbitControls, useGLTF, Stars } from "@react-three/drei";
+import { OrbitControls, useGLTF } from "@react-three/drei";
 import { Suspense, useRef, useEffect } from "react";
 import { Group } from "three";
 
@@ -14,7 +14,7 @@ function Globe() {
     scene.traverse((child: any) => {
       if (child.isMesh) {
         child.material.metalness = 0.5;
-        child.material.roughness = 0;
+        child.material.roughness = 1;
         child.material.envMapIntensity = 1;
       }
     });
@@ -31,7 +31,7 @@ function Globe() {
       <primitive 
         ref={globeRef}
         object={scene}
-        scale={15}
+        scale={2}
         position={[0, 0, 0]}
       />
     </group>
@@ -40,25 +40,26 @@ function Globe() {
 
 export function Hero3D() {
   return (
-    <div className="h-full w-full">
-      <Canvas
-        camera={{ position: [0, 0, 5], fov: 75 }}
-        style={{ background: "transparent" }}
-      >
-        <ambientLight intensity={1.5} />
-        <directionalLight position={[5, 5, 5]} intensity={2} />
-        <directionalLight position={[-5, -5, -5]} intensity={2} />
-        <Suspense fallback={null}>
-          <Stars radius={100} depth={100} count={5000} factor={4} saturation={0} fade speed={3} />
-          <Globe />
-          <OrbitControls 
-            enableZoom={false}
-            enablePan={false}
-            autoRotate
-            autoRotateSpeed={0.5}
-          />
-        </Suspense>
-      </Canvas>
+    <div className="h-full w-full flex items-end justify-center relative">
+      <div className="w-screen h-screen max-w-full max-h-full">
+        <Canvas
+          camera={{ position: [4, 4, 4], fov: 60 }}
+          style={{ background: "transparent" }}
+        >
+          <ambientLight intensity={1.5} />
+          <directionalLight position={[5, 5, 5]} intensity={2} />
+          <directionalLight position={[-5, -5, -5]} intensity={2} />
+          <Suspense fallback={null}>
+            <Globe />
+            <OrbitControls 
+              enableZoom={false}
+              enablePan={false}
+              autoRotate
+              autoRotateSpeed={0.1}
+            />
+          </Suspense>
+        </Canvas>
+      </div>
     </div>
   );
 } 

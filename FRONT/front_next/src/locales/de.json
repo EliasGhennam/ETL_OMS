@@ -1,0 +1,71 @@
+{
+  "home": {
+    "title": "Die Zukunft der Gesundheit in Ihrer Hand",
+    "subtitle": "Tauchen Sie ein in ein umfassendes Tool für unvergleichliche Informationen.",
+    "cta_stats": "Statistiken anzeigen",
+    "cta_about": "Über uns",
+    "carousel": ["Anzeigen", "Vorhersagen", "Verarbeiten", "Speichern", "Analysieren"],
+    "carousel_prefix": "Nutzen Sie unser Tool, um",
+    "carousel_suffix": "Daten zu Epidemien zu erhalten!"
+  },
+  "menu": {
+    "visualiser": "Anzeigen",
+    "inserer": "Daten in ETL einfügen",
+    "traiter": "Verarbeiten",
+    "prediction": "KI-Vorhersage",
+    "apropos": "Über uns"
+  },
+  "statistics": {
+    "title": "Datenvisualisierung",
+    "description": "Erkunden Sie interaktive Statistiken zu Pandemien.",
+    "forbidden": "Die Statistikseite ist aus der Schweiz nicht zugänglich.",
+    "forbiddenTitle": "Zugriff verweigert",
+    "filter_title": "Krankheitsstatistiken",
+    "filter_description": "Falltrends der letzten 6 Monate",
+    "country_label": "Land",
+    "country_placeholder": "Land auswählen",
+    "disease_label": "Krankheit",
+    "disease_placeholder": "Krankheit auswählen",
+    "loading": "Laden...",
+    "no_data": "Für die aktuellen Auswahlen sind keine Daten verfügbar.",
+    "main_chart_title": "Neue Todesfälle und Fälle",
+    "main_chart_description": "Tägliche Entwicklung der neuen Fälle und Todesfälle",
+    "total_mort_title": "Gesamtzahl der Todesfälle",
+    "total_mort_description": "Kumulative Entwicklung der Todesfälle",
+    "total_cas_title": "Gesamtzahl der Fälle",
+    "total_cas_description": "Kumulative Entwicklung der Fälle",
+    "footer_realtime": "Echtzeitanalyse",
+    "footer_daily_update": "Daten täglich aktualisiert",
+    "nouveau_mort_label": "Neue Todesfälle",
+    "nouveau_cas_label": "Neue Fälle",
+    "total_mort_label": "Gesamtzahl der Todesfälle",
+    "total_cas_label": "Gesamtzahl der Fälle"
+  },
+  "traiter": {
+    "title": "Datenverarbeitung",
+    "description": "Reichen Sie Ihre Daten zur Verarbeitung und Analyse ein.",
+    "dropzone": "Dateien hierher ziehen oder klicken, um auszuwählen.",
+    "pendingFiles": "Ausstehende Dateien:",
+    "processing": "Verarbeitung...",
+    "startProcessing": "Verarbeitung starten",
+    "pingApi": "Ping API",
+    "liveLogs": "Live-Logs"
+  },
+  "prediction": {
+    "title": "KI-Vorhersage",
+    "description": "Erhalten Sie Vorhersagen zur Entwicklung von Pandemien durch künstliche Intelligenz.",
+    "step1Title": "Schritt 1: Daten hochladen",
+    "step1Desc": "Laden Sie Datendateien (CSV, XLSX) für das Training hoch.",
+    "step2Title": "Schritt 2: Daten vorbereiten",
+    "step2Desc": "Erstellen und zwischenspeichern Sie den Datensatz für das Training.",
+    "step2Btn": "Vorbereiten",
+    "step3Title": "Schritt 3: Modell trainieren",
+    "step3Desc": "Trainieren Sie das LSTM-Modell mit den vorbereiteten Daten.",
+    "step3Btn": "Trainieren",
+    "step4Title": "Schritt 4: Vorhersage generieren",
+    "step4Desc": "Verwenden Sie das trainierte Modell, um eine Vorhersage zu generieren.",
+    "step4Btn": "Vorhersagen",
+    "uploadBtn": "Dateien hochladen",
+    "resultsTitle": "Vorhersageergebnisse"
+  }
+} 

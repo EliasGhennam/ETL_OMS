@@ -35,15 +35,15 @@ services:
 
   front:
     build:
-      context: ./FRONT/MSPR_Front
+      context: ./FRONT/front_next
       dockerfile: Dockerfile
-    container_name: etl-front
+    container_name: next-front
     ports:
-      - "4200:80"
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
     depends_on:
       - api_java
-
-
 
   db:
     image: postgres:13
