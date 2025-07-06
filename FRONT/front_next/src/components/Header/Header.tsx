@@ -31,9 +31,9 @@ export function Header() {
         <div className="flex-1 flex justify-start">
           <Link href="/" className="flex items-center space-x-2">
           <div className="relative w-36 h-10">
-            <Image
-              src="/HealthCheckerLogo.png"
-              alt="Logo"
+            <Image 
+              src="/HealthCheckerLogo.png" 
+              alt="Logo" 
               fill
               className={`object-contain transition-all duration-300${mounted && ((theme === 'system' ? systemTheme : theme) === 'dark') ? ' invert brightness-200' : ''}`}
             />
@@ -58,7 +58,7 @@ export function Header() {
         {/* -- Section de droite (Theme Toggle & Menu mobile) -- */}
         <div className="flex-1 flex justify-end items-center">
           <div className="hidden md:flex items-center">
-            <ThemeToggle />
+          <ThemeToggle />
             <CountrySelector />
           </div>
           {/* Bouton menu mobile */}

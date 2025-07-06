@@ -29,25 +29,25 @@ export default function RootLayout({
         const { language } = context;
         return (
           <html lang={language} suppressHydrationWarning>
-            <body className={`${inter.className} min-h-screen bg-background`}>
+      <body className={`${inter.className} min-h-screen bg-background`}>
               <IntlProvider key={language} locale={language} messages={{ fr, en, de, es, ar }[language] as Record<string, any>}>
-                <ThemeProvider
-                  attribute="class"
-                  defaultTheme="dark"
-                  enableSystem
-                  disableTransitionOnChange
-                >
+        <ThemeProvider
+          attribute="class"
+                  defaultTheme="light"
+          enableSystem
+          disableTransitionOnChange
+        >
                   <CookieConsentPopup />
-                  <div className="flex min-h-screen flex-col pt-8">
-                    <Header />
-                    <main className="flex-1">
-                      {children}
-                    </main>
-                  </div>
-                </ThemeProvider>
+          <div className="flex min-h-screen flex-col pt-8">
+            <Header />
+            <main className="flex-1">
+              {children}
+            </main>
+          </div>
+        </ThemeProvider>
               </IntlProvider>
-            </body>
-          </html>
+      </body>
+    </html>
         );
       }}</LanguageConsumer>
     </LanguageProvider>

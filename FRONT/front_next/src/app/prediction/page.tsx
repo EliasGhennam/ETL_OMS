@@ -125,77 +125,77 @@ export default function PredictionPage() {
           </label>
         </div>
         {mode === 'train' ? (
-          <Card className="w-full backdrop-blur-xl bg-white/60 dark:bg-white/10 shadow-xl border-white/30 dark:border-white/20">
-            <CardHeader className="text-center">
+        <Card className="w-full backdrop-blur-xl bg-white/60 dark:bg-white/10 shadow-xl border-white/30 dark:border-white/20">
+          <CardHeader className="text-center">
               <CardTitle className="text-2xl md:text-3xl font-bold">{t("title")}</CardTitle>
               <CardDescription>{t("description")}</CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-8 p-6">
-              {steps.map((step, index) => (
-                <div key={step.id} className="flex flex-col sm:flex-row items-start gap-6">
-                  <div className="flex-shrink-0 flex flex-col items-center">
-                    <div className={`h-12 w-12 rounded-full flex items-center justify-center border-2 ${
-                      step.status === 'success' ? 'bg-green-500/20 border-green-500' : 
-                      step.status === 'error' ? 'bg-red-500/20 border-red-500' : 'border-border'
-                    }`}>
-                      {step.status === 'in-progress' && <Loader2 className="h-6 w-6 animate-spin" />}
-                      {step.status === 'success' && <CheckCircle2 className="h-6 w-6 text-green-500" />}
-                      {step.status === 'error' && <XCircle className="h-6 w-6 text-red-500" />}
-                      {step.status === 'pending' && <span className="text-xl font-bold">{index + 1}</span>}
-                    </div>
-                    {index < steps.length - 1 && <div className="w-0.5 h-16 bg-border mt-2" />}
+          </CardHeader>
+          <CardContent className="space-y-8 p-6">
+            {steps.map((step, index) => (
+              <div key={step.id} className="flex flex-col sm:flex-row items-start gap-6">
+                <div className="flex-shrink-0 flex flex-col items-center">
+                  <div className={`h-12 w-12 rounded-full flex items-center justify-center border-2 ${
+                    step.status === 'success' ? 'bg-green-500/20 border-green-500' : 
+                    step.status === 'error' ? 'bg-red-500/20 border-red-500' : 'border-border'
+                  }`}>
+                    {step.status === 'in-progress' && <Loader2 className="h-6 w-6 animate-spin" />}
+                    {step.status === 'success' && <CheckCircle2 className="h-6 w-6 text-green-500" />}
+                    {step.status === 'error' && <XCircle className="h-6 w-6 text-red-500" />}
+                    {step.status === 'pending' && <span className="text-xl font-bold">{index + 1}</span>}
                   </div>
-
-                  <div className="flex-grow w-full">
-                    <h3 className="text-lg font-semibold">{step.title}</h3>
-                    <p className="text-muted-foreground mb-4">{step.description}</p>
-                    
-                    {step.id === 'upload' && (
-                      <div className="space-y-4">
-                         <div
-                            className={`group relative border-2 border-dashed rounded-lg p-8 text-center transition-colors cursor-pointer ${dragActive ? "border-primary" : "border-border"}`}
-                            onClick={() => inputRef.current?.click()} onDragEnter={handleDrag} onDragLeave={handleDrag} onDragOver={handleDrag} onDrop={handleDrop}
-                          >
-                            <UploadCloud className="h-10 w-10 mx-auto text-muted-foreground group-hover:text-primary transition-colors" />
-                            <p className="mt-2 text-sm text-muted-foreground">{t("dropzone")}</p>
-                            <Input ref={inputRef} type="file" onChange={handleFileChange} className="hidden" multiple />
-                          </div>
-                          {files.length > 0 && (
-                            <ul className="space-y-2">
-                              {files.map((file, i) => (
-                                <li key={i} className="flex items-center justify-between bg-muted/50 p-2 rounded-md">
-                                  <FileIcon className="h-5 w-5 text-muted-foreground" />
-                                  <span className="text-sm font-medium truncate ml-2 flex-grow">{file.name}</span>
-                                  <Button type="button" variant="ghost" size="icon" onClick={() => handleRemoveFile(i)}><Trash2 className="h-4 w-4 text-destructive" /></Button>
-                                </li>
-                              ))}
-                            </ul>
-                          )}
-                        <Button onClick={handleUpload} disabled={files.length === 0 || step.status === 'in-progress'} className="w-full">
-                          {step.status === 'in-progress' ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
-                          {t("uploadBtn")}
-                        </Button>
-                      </div>
-                    )}
-
-                    {step.id !== 'upload' && (
-                      <Button onClick={step.action} disabled={isStepDisabled(index) || step.status === 'in-progress'}>
-                        {step.status === 'in-progress' && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                        {step.buttonText}
-                      </Button>
-                    )}
-                    {step.status === 'error' && <p className="text-red-500 text-sm mt-2">{step.errorMessage}</p>}
-                  </div>
+                  {index < steps.length - 1 && <div className="w-0.5 h-16 bg-border mt-2" />}
                 </div>
-              ))}
-              {results && (
-                  <Card className="mt-6">
+
+                <div className="flex-grow w-full">
+                  <h3 className="text-lg font-semibold">{step.title}</h3>
+                  <p className="text-muted-foreground mb-4">{step.description}</p>
+                  
+                  {step.id === 'upload' && (
+                    <div className="space-y-4">
+                       <div
+                          className={`group relative border-2 border-dashed rounded-lg p-8 text-center transition-colors cursor-pointer ${dragActive ? "border-primary" : "border-border"}`}
+                          onClick={() => inputRef.current?.click()} onDragEnter={handleDrag} onDragLeave={handleDrag} onDragOver={handleDrag} onDrop={handleDrop}
+                        >
+                          <UploadCloud className="h-10 w-10 mx-auto text-muted-foreground group-hover:text-primary transition-colors" />
+                            <p className="mt-2 text-sm text-muted-foreground">{t("dropzone")}</p>
+                          <Input ref={inputRef} type="file" onChange={handleFileChange} className="hidden" multiple />
+                        </div>
+                        {files.length > 0 && (
+                          <ul className="space-y-2">
+                            {files.map((file, i) => (
+                              <li key={i} className="flex items-center justify-between bg-muted/50 p-2 rounded-md">
+                                <FileIcon className="h-5 w-5 text-muted-foreground" />
+                                <span className="text-sm font-medium truncate ml-2 flex-grow">{file.name}</span>
+                                <Button type="button" variant="ghost" size="icon" onClick={() => handleRemoveFile(i)}><Trash2 className="h-4 w-4 text-destructive" /></Button>
+                              </li>
+                            ))}
+                          </ul>
+                        )}
+                      <Button onClick={handleUpload} disabled={files.length === 0 || step.status === 'in-progress'} className="w-full">
+                        {step.status === 'in-progress' ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
+                          {t("uploadBtn")}
+                      </Button>
+                    </div>
+                  )}
+
+                  {step.id !== 'upload' && (
+                    <Button onClick={step.action} disabled={isStepDisabled(index) || step.status === 'in-progress'}>
+                      {step.status === 'in-progress' && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                      {step.buttonText}
+                    </Button>
+                  )}
+                  {step.status === 'error' && <p className="text-red-500 text-sm mt-2">{step.errorMessage}</p>}
+                </div>
+              </div>
+            ))}
+            {results && (
+                <Card className="mt-6">
                       <CardHeader><CardTitle>{t("resultsTitle")}</CardTitle></CardHeader>
-                      <CardContent><pre className="bg-muted p-4 rounded-lg overflow-x-auto">{JSON.stringify(results, null, 2)}</pre></CardContent>
-                  </Card>
-              )}
-            </CardContent>
-          </Card>
+                    <CardContent><pre className="bg-muted p-4 rounded-lg overflow-x-auto">{JSON.stringify(results, null, 2)}</pre></CardContent>
+                </Card>
+            )}
+          </CardContent>
+        </Card>
         ) : (
           <Card className="w-full backdrop-blur-xl bg-white/60 dark:bg-white/10 shadow-xl border-white/30 dark:border-white/20">
             <CardHeader className="text-center">

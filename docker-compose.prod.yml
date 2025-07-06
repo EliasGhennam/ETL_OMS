@@ -1,0 +1,135 @@
+version: '3.8'
+
+services:
+  # Base de données PostgreSQL
+  postgres:
+    image: postgres:13
+    container_name: etl-oms-postgres
+    environment:
+      POSTGRES_DB: pandemie
+      POSTGRES_USER: ${POSTGRES_USER:-user}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-password}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-user} -d pandemie"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # API ETL
+  api-etl:
+    image: etl-oms-api-etl:latest
+    container_name: etl-oms-api-etl
+    environment:
+      - DATABASE_URL=postgresql://${POSTGRES_USER:-user}:${POSTGRES_PASSWORD:-password}@postgres:5432/pandemie
+      - LOG_LEVEL=INFO
+    ports:
+      - "5000:5000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # API IA
+  api-ia:
+    image: etl-oms-api-ia:latest
+    container_name: etl-oms-api-ia
+    environment:
+      - DATABASE_URL=postgresql://${POSTGRES_USER:-user}:${POSTGRES_PASSWORD:-password}@postgres:5432/pandemie
+      - MODEL_PATH=/app/models
+      - LOG_LEVEL=INFO
+    ports:
+      - "5001:5001"
+    volumes:
+      - ia_models:/app/models
+      - ia_data:/app/data
+    depends_on:
+      postgres:
+        condition: service_healthy
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5001/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # API Java (Spring Boot)
+  api-java:
+    image: etl-oms-api-java:latest
+    container_name: etl-oms-api-java
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/pandemie
+      - SPRING_DATASOURCE_USERNAME=${POSTGRES_USER:-user}
+      - SPRING_DATASOURCE_PASSWORD=${POSTGRES_PASSWORD:-password}
+      - SPRING_PROFILES_ACTIVE=prod
+    ports:
+      - "8080:8080"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/actuator/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Frontend Next.js
+  frontend:
+    image: etl-oms-frontend:latest
+    container_name: etl-oms-frontend
+    environment:
+      - NODE_ENV=production
+      - NEXT_PUBLIC_API_ETL_URL=http://api-etl:5000
+      - NEXT_PUBLIC_API_IA_URL=http://api-ia:5001
+      - NEXT_PUBLIC_API_JAVA_URL=http://api-java:8080
+    ports:
+      - "3000:3000"
+    depends_on:
+      - api-etl
+      - api-ia
+      - api-java
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Nginx (Reverse Proxy)
+  nginx:
+    image: nginx:alpine
+    container_name: etl-oms-nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./ssl:/etc/nginx/ssl:ro
+    depends_on:
+      - frontend
+      - api-etl
+      - api-ia
+      - api-java
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
+    driver: local
+  ia_models:
+    driver: local
+  ia_data:
+    driver: local
+
+networks:
+  default:
+    name: etl-oms-network 
