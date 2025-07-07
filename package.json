@@ -1,6 +1,7 @@
 {
   "dependencies": {
     "@vercel/style-guide": "^6.0.0",
+    "act": "^0.0.6",
     "chart.js": "^4.4.9",
     "pandas": "^0.0.3",
     "pip": "^0.0.1",

@@ -17,6 +17,7 @@ class LSTMModel(nn.Module):
         out = self.fc(out[:, -1, :])
         return out.squeeze()
 
+
 def train_for_target(df, features, target_name, device):
     print(f"\n🚀 Entraînement pour la cible : {target_name}")
     df_target = df.dropna(subset=features + [target_name])
@@ -56,10 +57,11 @@ def train_for_target(df, features, target_name, device):
             loss.backward()
             optimizer.step()
             epoch_loss += loss.item()
-        print(f"📉 {target_name} - Epoch {epoch+1} - Loss : {epoch_loss / len(dataloader):.4f}")
+        print(f"📉 {target_name} - Epoch {epoch + 1} - Loss : {epoch_loss / len(dataloader):.4f}")
 
     torch.save(model.state_dict(), f"models/model_lstm_{target_name}.pt")
     print(f"✅ Modèle sauvegardé : models/model_lstm_{target_name}.pt")
+
 
 def main():
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -87,12 +89,13 @@ def main():
     joblib.dump(scaler, "models/lstm_scaler.pkl")
     print("📦 Scaler sauvegardé dans models/lstm_scaler.pkl")
 
-    
     for target in targets:
         df[target] = df["target"]  # on injecte une colonne factice pour éviter le KeyError
         train_for_target(df, features, target, device)
 
+
 if __name__ == "__main__":
     main()
+
 
 __all__ = ["LSTMModel"]

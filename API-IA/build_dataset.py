@@ -3,7 +3,6 @@
 import pandas as pd
 import psycopg2
 import os
-import joblib
 import pickle
 
 connection_params = {
@@ -14,10 +13,11 @@ connection_params = {
     "port": "50013"
 }
 
+
 def get_data_from_db():
     conn = psycopg2.connect(**connection_params)
     query = """
-        SELECT 
+        SELECT
             s.date,
             s.id_maladie,
             s.id_region,
@@ -43,9 +43,7 @@ def get_data_from_db():
     return df
 
 
-
 def build_training_data(force_refresh=False):
-
     cache_path = "data_sources/cache_dataset.pkl"
 
     if not force_refresh and os.path.exists(cache_path):
@@ -76,7 +74,6 @@ def build_training_data(force_refresh=False):
     if not weather_path:
         raise FileNotFoundError("❌ Aucun fichier météo trouvé dans 'data_sources/'. Il doit contenir 'weather' dans son nom.")
 
-
     # 🔍 Détection automatique du fichier météo
     mobility_path = None
     for f in os.listdir("data_sources"):
@@ -87,7 +84,7 @@ def build_training_data(force_refresh=False):
 
     if not mobility_path:
         raise FileNotFoundError("❌ Aucun fichier de mobilité trouvé dans 'data_sources/'. Il doit contenir 'mobility' dans son nom.")
-    
+
     df_mob = pd.read_csv(mobility_path, parse_dates=["date"])
     df_mob = df_mob.rename(columns={
         "country_region": "pays",

@@ -13,12 +13,12 @@ export default function AboutPage() {
         <ul className="list-disc pl-6 text-base text-muted-foreground">
           <li>Collecter, nettoyer et stocker des données sanitaires (ETL)</li>
           <li>Visualiser et explorer les statistiques épidémiologiques</li>
-          <li>Prédire l'évolution des pandémies grâce à l'IA (LSTM)</li>
+          <li>Prédire l&apos;évolution des pandémies grâce à l&apos;IA (LSTM)</li>
           <li>Offrir une interface moderne, multilingue et accessible</li>
         </ul>
       </div>
       <div>
-        <h2 className="text-2xl font-semibold mb-4">L'équipe de développement</h2>
+        <h2 className="text-2xl font-semibold mb-4">L&apos;équipe de développement</h2>
         <div className="grid md:grid-cols-2 gap-6">
           <div className="bg-white/80 dark:bg-black/40 rounded-xl p-6 shadow flex flex-col items-center">
             <span className="text-xl font-bold">Elias GHENNAM</span>
@@ -55,7 +55,7 @@ export default function AboutPage() {
         </div>
       </div>
       <div className="mt-10 text-center text-sm text-muted-foreground">
-        Projet réalisé dans le cadre de l'EPSI - 2024. <br /> Licence MIT.
+        Projet réalisé dans le cadre de l&apos;EPSI - 2024. <br /> Licence MIT.
       </div>
     </div>
   );

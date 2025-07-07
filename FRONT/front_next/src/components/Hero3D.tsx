@@ -11,7 +11,7 @@ function Globe() {
 
   useEffect(() => {
     console.log('Model loaded:', scene);
-    scene.traverse((child: any) => {
+    scene.traverse((child: { isMesh?: boolean; material?: { metalness?: number; roughness?: number; envMapIntensity?: number } }) => {
       if (child.isMesh) {
         child.material.metalness = 0.5;
         child.material.roughness = 1;

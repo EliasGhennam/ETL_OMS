@@ -3,7 +3,6 @@ import { StatisticsDashboard } from "@/components/Statistics/StatisticsDashboard
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import React from "react";
 import { useCountryAndLanguage } from "@/lib/useCountryAndLanguage";
-import { useLanguage } from "@/context/LanguageContext";
 import { useTranslations } from "next-intl";
 
 export default function StatisticsPage() {

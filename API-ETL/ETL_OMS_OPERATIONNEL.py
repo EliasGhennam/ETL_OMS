@@ -3,7 +3,6 @@ import os
 import re
 import time
 import psycopg2
-import io
 
 # Configuration
 datasets_folder = "./DATASETS"
@@ -28,8 +27,10 @@ standard_columns = [
     "new_cases", "new_deaths", "latitude", "longitude"
 ]
 
+
 def normalize_column_name(col):
     return re.sub(r"[^a-z0-9]+", "_", col.strip().lower())
+
 
 def apply_flexible_mapping(df):
     # Synonymes pour mapper vers nos champs
@@ -73,6 +74,7 @@ def apply_flexible_mapping(df):
 def extract(fp):
     return pd.read_csv(fp) if fp.lower().endswith(".csv") else pd.read_json(fp)
 
+
 def detect_maladie(fname):
     n = fname.lower()
     for k, v in maladies_mapping.items():
@@ -80,17 +82,20 @@ def detect_maladie(fname):
             return v
     return "Inconnue"
 
+
 def get_population(country_name, cur):
     """À implémenter : retourner la population de la région/pays depuis la BD"""
     # Ex : cur.execute("SELECT population FROM region r JOIN pays p ON r.id_pays=p.id_pays WHERE p.nom_pays=%s", (country_name,))
     #      return cur.fetchone()[0] or None
     return None
 
+
 def complete_missing_columns(df):
     for col in standard_columns:
         if col not in df.columns:
             df[col] = pd.NA
     return df
+
 
 def transform(df, cur):
     df = apply_flexible_mapping(df)
@@ -116,7 +121,6 @@ def transform(df, cur):
             print("⚠️ DataFrame vide après nettoyage des dates, pas de population récupérée.")
     else:
         print("⚠️ Colonne 'country' non détectée après le mapping.")
-
 
     for col in df.columns:
         if "per_100_000" in col or "per_100k" in col:
@@ -149,13 +153,15 @@ def transform(df, cur):
 
     return df
 
+
 def connect_db():
     return psycopg2.connect(**connection_params)
 
+
 def prepare_temp_csv(rows):
     df = pd.DataFrame(rows, columns=[
-        "id_maladie","id_region","date","nouveau_mort","nouveau_cas",
-        "total_mort","total_cas",
+        "id_maladie", "id_region", "date", "nouveau_mort", "nouveau_cas",
+        "total_mort", "total_cas",
         "stringency_index", "vaccinated", "hospital_beds_per_thousand", "population_density"
     ])
 
@@ -201,26 +207,14 @@ def copy_into_temp_statistique(cur=None, conn=None):
             total_mort INTEGER,
             total_cas INTEGER,
             stringency_index FLOAT,
-            vaccinated BIGINT,
+            vaccinated INTEGER,
             hospital_beds_per_thousand FLOAT,
             population_density FLOAT
         );
     """)
-    conn.commit()
 
-    print("⏳ Copie dans temp_statistique en cours...")
-    with open(temp_csv, "r") as f:
-        cur.copy_expert("""
-            COPY temp_statistique(
-                id_region, date, id_maladie, 
-                nouveau_mort, nouveau_cas, total_mort, total_cas,
-                stringency_index, vaccinated, hospital_beds_per_thousand, population_density
-            )
-            FROM STDIN WITH CSV
-        """, f)
-
-    conn.commit()
-    print("✅ Copie terminée !")
+    with open(temp_csv, 'r') as f:
+        cur.copy_from(f, 'temp_statistique', sep=',')
 
     cur.execute("""
         INSERT INTO statistique (
@@ -228,13 +222,13 @@ def copy_into_temp_statistique(cur=None, conn=None):
             nouveau_mort, nouveau_cas, total_mort, total_cas,
             stringency_index, vaccinated, hospital_beds_per_thousand, population_density
         )
-        SELECT 
+        SELECT
             id_maladie, id_region, date,
             nouveau_mort, nouveau_cas, total_mort, total_cas,
             stringency_index, vaccinated, hospital_beds_per_thousand, population_density
         FROM temp_statistique
         ON CONFLICT (id_region, date) DO UPDATE
-        SET 
+        SET
             nouveau_mort = EXCLUDED.nouveau_mort,
             nouveau_cas = EXCLUDED.nouveau_cas,
             total_mort = EXCLUDED.total_mort,
@@ -243,13 +237,13 @@ def copy_into_temp_statistique(cur=None, conn=None):
             vaccinated = EXCLUDED.vaccinated,
             hospital_beds_per_thousand = EXCLUDED.hospital_beds_per_thousand,
             population_density = EXCLUDED.population_density;
-
     """)
     conn.commit()
 
     if close_after:
         cur.close()
         conn.close()
+
 
 def run_etl(filename=None, progress_callback=None):
     nb_fichiers_traite = 0
@@ -343,16 +337,19 @@ def run_etl(filename=None, progress_callback=None):
             nc = int(r["new_cases"]) if not pd.isna(r["new_cases"]) else 0
             tm = int(r["deaths"]) if not pd.isna(r["deaths"]) else 0
             tc = int(r["confirmed"]) if not pd.isna(r["confirmed"]) else 0
+
             def safe_float(value):
                 try:
                     return float(value)
-                except:
+                except Exception:
                     return 0.0
+
             def safe_int(value):
                 try:
                     return int(float(value))
-                except:
+                except Exception:
                     return 0
+
             stringency = safe_float(r.get("stringency_index"))
             vaccinated = safe_int(r.get("people_vaccinated"))
             beds = safe_float(r.get("hospital_beds_per_thousand"))
@@ -401,6 +398,7 @@ def run_etl(filename=None, progress_callback=None):
     print(f"📊 Bilan : {nb_fichiers_traite} fichiers traités, {nb_fichiers_ignores} fichiers ignorés.")
     print("✅ ETL terminé avec traitement optimisé !")
 
+
 if __name__ == "__main__":
     print("=== MENU PRINCIPAL ===")
     print("1. Lancer le traitement ETL (insertion en base)")
@@ -424,7 +422,6 @@ if __name__ == "__main__":
         train_lstm()
 
     elif choix == "4":
-        import os
         os.system("python forecast_ia_lstm.py")
 
     else:

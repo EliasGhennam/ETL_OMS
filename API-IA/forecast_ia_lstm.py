@@ -5,6 +5,7 @@ import joblib
 from datetime import timedelta
 import os
 
+
 def generate_forecast():
     # Définir les features utilisées
     features = [
@@ -14,7 +15,6 @@ def generate_forecast():
         "stringency_index", "vaccinated",
         "hospital_beds_per_thousand", "population_density"
     ]
-
 
     # Charger le dataset cache complet
     df = pd.read_pickle("data_sources/cache_dataset.pkl")
@@ -91,7 +91,6 @@ def generate_forecast():
                 "population_density": row["population_density"]
             })
 
-
     # Combine les historiques + prédictions
     colonnes_finales = [
         "id_maladie", "id_region", "date",
@@ -140,6 +139,13 @@ def generate_forecast():
     df_pred['date'] = df_pred['date'].astype(str)
     result = df_pred.rename(columns={'nouveau_cas': 'valeur'}).to_dict(orient='records')
     return result
+
+
+def main():
+    """Fonction principale pour l'exécution en ligne de commande."""
+    result = generate_forecast()
+    print(f"✅ Prédictions générées : {len(result)} points de données")
+
 
 # Permet d'appeler le script à la fois en CLI et comme module
 if __name__ == "__main__":

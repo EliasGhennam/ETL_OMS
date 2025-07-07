@@ -6,18 +6,15 @@ import { ThemeToggle } from "./ThemeToggle";
 import { useState, useEffect } from "react";
 import { Menu } from "lucide-react";
 import { useTheme } from "next-themes";
-import Cookies from "js-cookie";
-import { useCountryAndLanguage } from "@/lib/useCountryAndLanguage";
-import { useLanguage } from "@/context/LanguageContext";
 import { CountrySelector } from "@/components/CountrySelector";
 import { useTranslations } from "next-intl";
+import { useCountryAndLanguage } from "@/lib/useCountryAndLanguage";
 
 export function Header() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const { theme, systemTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
-  const { country } = useCountryAndLanguage();
-  const { language } = useLanguage();
+  const { country, language, loading, error } = useCountryAndLanguage();
   const t = useTranslations("menu");
 
   useEffect(() => {

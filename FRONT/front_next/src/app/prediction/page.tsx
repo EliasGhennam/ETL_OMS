@@ -24,7 +24,7 @@ export default function PredictionPage() {
   const [files, setFiles] = useState<File[]>([]);
   const [dragActive, setDragActive] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
-  const [results, setResults] = useState<any>(null);
+  const [results, setResults] = useState<{ status: string; details: unknown } | null>(null);
   const t = useTranslations("prediction");
   const [mode, setMode] = useState<'train' | 'predict'>("train");
   const [loading, setLoading] = useState(false);
@@ -49,8 +49,9 @@ export default function PredictionPage() {
       } else {
         throw new Error(data.message || `Erreur à l'étape ${stepId}`);
       }
-    } catch (err: any) {
-      updateStepStatus(stepId, "error", err.message);
+    } catch (err: unknown) {
+      const errorMessage = err instanceof Error ? err.message : 'Erreur inconnue';
+      updateStepStatus(stepId, "error", errorMessage);
     }
   };
 
@@ -74,8 +75,9 @@ export default function PredictionPage() {
       } else {
         throw new Error(data.message || "Erreur lors de l'upload");
       }
-    } catch (err: any) {
-      updateStepStatus('upload', 'error', err.message);
+    } catch (err: unknown) {
+      const errorMessage = err instanceof Error ? err.message : 'Erreur inconnue';
+      updateStepStatus('upload', 'error', errorMessage);
     }
   };
 
@@ -214,10 +216,11 @@ export default function PredictionPage() {
                     if (res.ok && data.status === 'success') {
                       setResults(data.details);
                     } else {
-                      setError(data.message || 'Erreur lors de la génération de la prédiction');
+                      throw new Error(data.message || 'Erreur lors de la génération de la prédiction');
                     }
-                  } catch (e: any) {
-                    setError(e.message || 'Erreur lors de la génération de la prédiction');
+                  } catch (e: unknown) {
+                    const errorMessage = e instanceof Error ? e.message : 'Erreur inconnue';
+                    setError(errorMessage);
                   } finally {
                     setLoading(false);
                   }

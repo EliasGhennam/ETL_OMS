@@ -1,0 +1,115 @@
+name: CI/CD ETL_OMS (Local Test)
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+
+jobs:
+  build-test-lint:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # =========================
+      # Python (API-ETL + API-IA)
+      # =========================
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.10"
+
+      - name: Install global Python dependencies
+        run: |
+          pip install -r requirements.txt
+
+      - name: Install API-ETL dependencies
+        run: |
+          pip install -r API-ETL/requirements.txt
+
+      - name: Install API-IA dependencies
+        run: |
+          pip install -r API-IA/requirements.txt
+
+      - name: Install testing tools
+        run: |
+          pip install pytest flake8 pytest-cov
+
+      - name: Lint API-ETL
+        run: |
+          flake8 API-ETL --max-line-length=120 --ignore=E501,W503
+
+      - name: Lint API-IA
+        run: |
+          flake8 API-IA --max-line-length=120 --ignore=E501,W503
+
+      - name: Test API-ETL (syntax check)
+        run: |
+          cd API-ETL
+          python -m py_compile main.py
+          python -m py_compile ETL_OMS_OPERATIONNEL.py
+
+      - name: Test API-IA (syntax check)
+        run: |
+          cd API-IA
+          python -m py_compile main.py
+          python -m py_compile forecast_ia_lstm.py
+          python -m py_compile train_ia_lstm.py
+          python -m py_compile predict_ia_lstm.py
+          python -m py_compile build_dataset.py
+          python -m py_compile scenario_forecast.py
+
+      # =========================
+      # Java (API-JAVA)
+      # =========================
+      - name: Set up Java
+        uses: actions/setup-java@v3
+        with:
+          distribution: "temurin"
+          java-version: "17"
+
+      - name: Fix Maven wrapper permissions
+        run: chmod +x API-JAVA/API-Pandemie/mvnw
+
+      - name: Build Java
+        run: |
+          cd API-JAVA/API-Pandemie
+          ./mvnw clean install -DskipTests
+
+      # =========================
+      # Node.js (Next.js uniquement)
+      # =========================
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install Node dependencies (Next.js)
+        run: |
+          cd FRONT/front_next && npm ci
+
+      - name: Lint Next.js
+        run: |
+          cd FRONT/front_next && npm run lint
+
+      - name: Run Next.js tests
+        run: |
+          cd FRONT/front_next && npm test -- --coverage --watchAll=false
+
+      - name: Build Next.js
+        run: |
+          cd FRONT/front_next && npm run build
+
+      # =========================
+      # Test de build Docker (sans services)
+      # =========================
+      - name: Test Docker builds
+        run: |
+          echo "Testing Docker builds..."
+          docker build -t test-api-etl ./API-ETL
+          docker build -t test-api-ia ./API-IA
+          docker build -t test-frontend ./FRONT/front_next
+          echo "✅ All Docker builds successful" 

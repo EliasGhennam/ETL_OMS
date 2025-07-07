@@ -3,7 +3,7 @@ import { useState } from "react";
 
 export default function InsertionPage() {
   const [file, setFile] = useState<File | null>(null);
-  const [result, setResult] = useState<any>(null);
+  const [result, setResult] = useState<{ status: string; message: string; files?: string[] } | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 

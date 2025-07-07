@@ -26,14 +26,14 @@ export function ChartContainer({ children, config, className }: ChartContainerPr
   );
 }
 
-export function ChartTooltip({ children, ...props }: any) {
+export function ChartTooltip({ children, ...props }: { config?: ChartConfig; children: React.ReactNode }) {
   return (
     <TooltipProvider>
       <Tooltip {...props}>
         <TooltipTrigger asChild>{children}</TooltipTrigger>
         <TooltipContent>
           <div className="grid gap-2">
-            {Object.entries(props.config || {}).map(([key, value]: [string, any]) => (
+            {Object.entries(props.config || {}).map(([key, value]: [string, { label: string; color: string }]) => (
               <div key={key} className="flex items-center gap-2">
                 <div
                   className="h-2 w-2 rounded-full"
@@ -49,7 +49,12 @@ export function ChartTooltip({ children, ...props }: any) {
   )
 }
 
-export function ChartTooltipContent({ active, payload, label, config }: any) {
+export function ChartTooltipContent({ active, payload, label, config }: { 
+  active?: boolean; 
+  payload?: Array<{ color: string; name: string; value: number }>; 
+  label?: string; 
+  config?: ChartConfig 
+}) {
   console.log("ChartTooltipContent props:", { active, payload, label, config });
   if (!active || !payload?.length) {
     console.log("ChartTooltipContent: Not active or empty payload, returning null");
@@ -62,7 +67,7 @@ export function ChartTooltipContent({ active, payload, label, config }: any) {
         <div className="flex items-center justify-between gap-2">
           <div className="text-sm font-medium">{label}</div>
         </div>
-        {payload.map((entry: any, index: number) => (
+        {payload.map((entry: { color: string; name: string; value: number }, index: number) => (
           <div key={index} className="flex items-center justify-between gap-2">
             <div className="flex items-center gap-2">
               <div

@@ -84,9 +84,8 @@ export default function TraiterPage() {
         setLoading(false);
         setError("Erreur de connexion pour les logs en direct.");
       };
-    } catch (err: any) {
-      setError(err.message || "Erreur inconnue");
-      setLoading(false);
+    } catch {
+      setError("API injoignable");
     }
   };
   
@@ -96,7 +95,7 @@ export default function TraiterPage() {
       const res = await fetch("http://127.0.0.1:5000/ping");
       const data = await res.json();
       setLogs(JSON.stringify(data, null, 2));
-    } catch (err) {
+    } catch (error) {
       setError("API injoignable");
     }
   };

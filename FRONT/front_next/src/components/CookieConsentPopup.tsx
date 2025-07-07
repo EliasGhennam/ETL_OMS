@@ -40,12 +40,12 @@ export function CookieConsentPopup() {
     <div className="fixed inset-0 z-50 flex items-end justify-center pointer-events-none">
       <div className="mb-8 w-full max-w-md rounded-lg bg-card shadow-lg border border-border p-6 pointer-events-auto flex flex-col gap-4 animate-fade-in">
         <div className="text-lg font-semibold">Consentement aux cookies</div>
-        <div className="text-sm text-muted-foreground">
-          Ce site utilise des cookies pour améliorer votre expérience. En continuant, vous acceptez notre <a href="/conditions" target="_blank" rel="noopener noreferrer" className="underline text-primary hover:text-primary/80">politique de confidentialité et conditions d'utilisation</a>.
-        </div>
+        <p className="text-sm text-muted-foreground">
+          Nous utilisons des cookies pour améliorer votre expérience sur notre site. En continuant à naviguer, vous acceptez notre utilisation des cookies. Pour plus d&apos;informations, consultez notre <a href="/conditions" className="underline text-blue-600 hover:text-blue-800" target="_blank" rel="noopener noreferrer">politique de confidentialité et conditions d&apos;utilisation</a>.
+        </p>
         <div className="flex justify-end">
           <Button onClick={acceptCookies} variant="default">
-            J'accepte
+            J&apos;accepte
           </Button>
         </div>
       </div>

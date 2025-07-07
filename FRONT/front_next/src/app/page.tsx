@@ -4,11 +4,9 @@ import { Hero3D } from "@/components/Hero3D";
 import { AnimatedText } from "@/components/AnimatedText";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { useState } from "react";
 import { useTranslations } from "next-intl";
 
 export default function Home() {
-  const [sidebarOpen, setSidebarOpen] = useState(false);
   const t = useTranslations("home");
   return (
     <div className="min-h-screen relative overflow-hidden bg-background -mt-16">

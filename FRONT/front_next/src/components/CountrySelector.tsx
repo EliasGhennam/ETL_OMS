@@ -2,6 +2,7 @@ import React from "react";
 import { Country, Language } from "@/lib/useCountryAndLanguage";
 import { useLanguage } from "@/context/LanguageContext";
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "./ui/select";
+import { useCountryAndLanguage } from "@/lib/useCountryAndLanguage";
 
 const COUNTRY_LANGUAGE_MAP: Record<Country, Language> = {
   FR: "fr",
@@ -24,16 +25,10 @@ const COUNTRIES: { code: Country; label: string }[] = [
 ];
 
 export function CountrySelector() {
-  const { language, setLanguage } = useLanguage();
-  const [country, setCountry] = React.useState<Country>(() => {
-    if (typeof window !== "undefined") {
-      return (localStorage.getItem("country") as Country) || "FR";
-    }
-    return "FR";
-  });
+  const { setLanguage } = useLanguage();
+  const { country, language, loading, error } = useCountryAndLanguage();
 
   const handleChange = (selectedCountry: Country) => {
-    setCountry(selectedCountry);
     localStorage.setItem("country", selectedCountry);
     const lang = COUNTRY_LANGUAGE_MAP[selectedCountry];
     setLanguage(lang);

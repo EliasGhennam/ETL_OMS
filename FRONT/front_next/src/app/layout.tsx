@@ -6,8 +6,6 @@ import { ThemeProvider } from '@/components/theme-provider'
 import { Header } from '@/components/Header/Header'
 import { CookieConsentPopup } from '@/components/CookieConsentPopup'
 import { LanguageProvider, LanguageConsumer } from "@/context/LanguageContext";
-import { useCountryAndLanguage } from "@/lib/useCountryAndLanguage";
-import { CountryLanguageDialog } from "@/components/CountryLanguageDialog";
 import { IntlProvider } from 'next-intl';
 import fr from '../locales/fr.json';
 import en from '../locales/en.json';
@@ -30,7 +28,7 @@ export default function RootLayout({
         return (
           <html lang={language} suppressHydrationWarning>
       <body className={`${inter.className} min-h-screen bg-background`}>
-              <IntlProvider key={language} locale={language} messages={{ fr, en, de, es, ar }[language] as Record<string, any>}>
+              <IntlProvider key={language} locale={language} messages={{ fr, en, de, es, ar }[language] as unknown as Record<string, string>}>
         <ThemeProvider
           attribute="class"
                   defaultTheme="light"

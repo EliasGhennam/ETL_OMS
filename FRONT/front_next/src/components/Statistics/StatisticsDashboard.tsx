@@ -13,8 +13,6 @@ import {
 } from "@/components/ui/card";
 import {
   ChartConfig,
-  ChartContainer,
-  ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
 import {
@@ -64,8 +62,8 @@ const calculateMovingAverage = (data: DataPoint[], windowSize: number): DataPoin
 const API_BASE = "http://localhost:8080/api";
 
 export function StatisticsDashboard() {
-  const [pays, setPays] = useState<any[]>([]);
-  const [maladies, setMaladies] = useState<any[]>([]);
+  const [pays, setPays] = useState<{ id_pays: string; nom_pays: string }[]>([]);
+  const [maladies, setMaladies] = useState<{ id_maladie: string; nom_maladie: string }[]>([]);
   const [selectedPays, setSelectedPays] = useState<string>("");
   const [selectedMaladie, setSelectedMaladie] = useState<string>("");
   const [combinedNouveauData, setCombinedNouveauData] = useState<CombinedDataPoint[]>([]);
@@ -83,7 +81,7 @@ export function StatisticsDashboard() {
     if (selectedPays && selectedMaladie) {
       fetchAllChartData();
     }
-  }, [selectedPays, selectedMaladie]);
+  }, [selectedPays, selectedMaladie, fetchAllChartData]);
 
   // Ajout d'un useEffect pour suivre les changements de l'état des données
   useEffect(() => {
@@ -110,7 +108,7 @@ export function StatisticsDashboard() {
   async function fetchPays() {
     const res = await fetch(`${API_BASE}/pays`);
     const data = await res.json();
-    const filtered = data.filter((p: any) => p.nom_pays !== "Inconnue");
+    const filtered = data.filter((p: { nom_pays: string }) => p.nom_pays !== "Inconnue");
     setPays(filtered);
     if (filtered.length > 0) setSelectedPays(filtered[0].id_pays);
   }
@@ -118,7 +116,7 @@ export function StatisticsDashboard() {
   async function fetchMaladies() {
     const res = await fetch(`${API_BASE}/maladies`);
     const data = await res.json();
-    const filtered = data.filter((m: any) => m.nom_maladie !== "Inconnue");
+    const filtered = data.filter((m: { nom_maladie: string }) => m.nom_maladie !== "Inconnue");
     setMaladies(filtered);
     if (filtered.length > 0) setSelectedMaladie(filtered[0].id_maladie);
   }
@@ -139,7 +137,7 @@ export function StatisticsDashboard() {
       const rawTotalCasData = await totalCasRes.json();
 
       // Process and smooth Nouveau Mort data
-      const processedNouveauMortData = rawNouveauMortData.map((d: any) => ({
+      const processedNouveauMortData = rawNouveauMortData.map((d: { date: string; valeur: string | number }) => ({
         date: d.date,
         valeur: Number(d.valeur),
       }));
@@ -147,7 +145,7 @@ export function StatisticsDashboard() {
       const smoothedNouveauMortData = calculateMovingAverage(processedNouveauMortData, dynamicWindowSizeNouveauMort);
 
       // Process and smooth Nouveau Cas data
-      const processedNouveauCasData = rawNouveauCasData.map((d: any) => ({
+      const processedNouveauCasData = rawNouveauCasData.map((d: { date: string; valeur: string | number }) => ({
         date: d.date,
         valeur: Number(d.valeur),
       }));
@@ -155,7 +153,7 @@ export function StatisticsDashboard() {
       const smoothedNouveauCasData = calculateMovingAverage(processedNouveauCasData, dynamicWindowSizeNouveauCas);
 
       // Process and smooth Total Mort data
-      const processedTotalMortData = rawTotalMortData.map((d: any) => ({
+      const processedTotalMortData = rawTotalMortData.map((d: { date: string; valeur: string | number }) => ({
         date: d.date,
         valeur: Number(d.valeur),
       }));
@@ -164,7 +162,7 @@ export function StatisticsDashboard() {
       setTotalMortData(smoothedTotalMortData);
 
       // Process and smooth Total Cas data
-      const processedTotalCasData = rawTotalCasData.map((d: any) => ({
+      const processedTotalCasData = rawTotalCasData.map((d: { date: string; valeur: string | number }) => ({
         date: d.date,
         valeur: Number(d.valeur),
       }));
