@@ -3,6 +3,7 @@ import torch.nn as nn
 import joblib
 import numpy as np
 
+
 # Chargement du modèle LSTM
 class LSTMModel(nn.Module):
     def __init__(self, input_size):
@@ -14,6 +15,7 @@ class LSTMModel(nn.Module):
         out, _ = self.lstm(x)
         out = self.fc(out[:, -1, :])
         return out.squeeze()
+
 
 # Exemple d'entrée : à remplacer par tes valeurs réelles
 # Format : [cas_j-1, cas_j-2, cas_j-3, temperature, humidity, work_mob, transit_mob, home_mob]

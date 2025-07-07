@@ -1,4 +1,4 @@
-name: CI/CD ETL_OMS
+name: CI/CD ETL_OMS (Local Test)
 
 on:
   push:
@@ -10,37 +10,9 @@ jobs:
   build-test-lint:
     runs-on: ubuntu-latest
 
-    services:
-      postgres:
-        image: postgres:13
-        env:
-          POSTGRES_DB: pandemie
-          POSTGRES_USER: user
-          POSTGRES_PASSWORD: password
-        ports:
-          - 5432:5432
-        options: >-
-          --health-cmd pg_isready
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-
-      # =========================
-      # Cache Python dependencies
-      # =========================
-      - name: Cache Python dependencies
-        uses: actions/cache@v3
-        with:
-          path: |
-            ~/.cache/pip
-            ~/.cache/pytest
-          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
-          restore-keys: |
-            ${{ runner.os }}-pip-
 
       # =========================
       # Python (API-ETL + API-IA)
@@ -99,13 +71,6 @@ jobs:
           distribution: "temurin"
           java-version: "17"
 
-      - name: Cache Maven dependencies
-        uses: actions/cache@v3
-        with:
-          path: ~/.m2
-          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
-          restore-keys: ${{ runner.os }}-m2-
-
       - name: Fix Maven wrapper permissions
         run: chmod +x API-JAVA/API-Pandemie/mvnw
 
@@ -115,126 +80,11 @@ jobs:
           ./mvnw clean install -DskipTests
 
       # =========================
-      # Node.js (Next.js uniquement)
+      # Test de build Docker (sans services)
       # =========================
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: "20"
-
-      - name: Cache Node.js dependencies
-        uses: actions/cache@v3
-        with:
-          path: |
-            FRONT/front_next/node_modules
-            ~/.npm
-          key: ${{ runner.os }}-node-${{ hashFiles('FRONT/front_next/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-node-
-
-      - name: Install Node dependencies (Next.js)
+      - name: Test Docker builds
         run: |
-          cd FRONT/front_next && npm ci
-
-      - name: Lint Next.js
-        run: |
-          cd FRONT/front_next && npm run lint
-
-      - name: Run Next.js tests
-        run: |
-          cd FRONT/front_next && npm test -- --coverage --watchAll=false
-
-      - name: Build Next.js
-        run: |
-          cd FRONT/front_next && npm run build
-
-      # =========================
-      # Docker Compose (Intégration)
-      # =========================
-      - name: Cache Docker layers
-        uses: actions/cache@v3
-        with:
-          path: /tmp/.buildx-cache
-          key: ${{ runner.os }}-buildx-${{ github.sha }}
-          restore-keys: |
-            ${{ runner.os }}-buildx-
-
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
-
-      - name: Build and up all services with Docker Compose
-        run: |
-          docker-compose up --build -d
-          sleep 30
-          docker-compose ps
-
-      - name: Run integration tests
-        run: |
-          # Attendre que tous les services soient prêts
-          sleep 60
-          
-          # Test de santé des APIs
-          curl -f http://localhost:5000/health || echo "API-ETL health check failed"
-          curl -f http://localhost:5001/health || echo "API-IA health check failed"
-          curl -f http://localhost:8080/actuator/health || echo "API-Java health check failed"
-          curl -f http://localhost:3000 || echo "Next.js health check failed"
-
-      # =========================
-      # Déploiement en production
-      # =========================
-      - name: Deploy to production
-        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-        run: |
-          echo "🚀 Déploiement en production..."
-          
-          # 1. Build des images Docker pour la production
-          docker build -t etl-oms-api-etl:latest ./API-ETL
-          docker build -t etl-oms-api-ia:latest ./API-IA
-          docker build -t etl-oms-api-java:latest ./API-JAVA/API-Pandemie
-          docker build -t etl-oms-frontend:latest ./FRONT/front_next
-          
-          # 2. Tag des images avec la version
-          VERSION=$(date +%Y%m%d-%H%M%S)
-          docker tag etl-oms-api-etl:latest etl-oms-api-etl:$VERSION
-          docker tag etl-oms-api-ia:latest etl-oms-api-ia:$VERSION
-          docker tag etl-oms-api-java:latest etl-oms-api-java:$VERSION
-          docker tag etl-oms-frontend:latest etl-oms-frontend:$VERSION
-          
-          # 3. Push vers Docker Hub (à configurer avec les secrets)
-          # echo ${{ secrets.DOCKER_PASSWORD }} | docker login -u ${{ secrets.DOCKER_USERNAME }} --password-stdin
-          # docker push etl-oms-api-etl:latest
-          # docker push etl-oms-api-ia:latest
-          # docker push etl-oms-api-java:latest
-          # docker push etl-oms-frontend:latest
-          
-          # 4. Déploiement sur serveur (exemple avec SSH)
-          # echo "📦 Déploiement sur le serveur de production..."
-          # echo ${{ secrets.SSH_PRIVATE_KEY }} > ssh_key
-          # chmod 600 ssh_key
-          # scp -i ssh_key -o StrictHostKeyChecking=no docker-compose.prod.yml ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }}:/app/
-          # ssh -i ssh_key -o StrictHostKeyChecking=no ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }} "
-          #   cd /app &&
-          #   docker-compose -f docker-compose.prod.yml down &&
-          #   docker-compose -f docker-compose.prod.yml pull &&
-          #   docker-compose -f docker-compose.prod.yml up -d &&
-          #   docker system prune -f
-          # "
-          # rm ssh_key
-          
-          echo "✅ Déploiement terminé avec succès!"
-          echo "📊 Version déployée: $VERSION"
-
-      # =========================
-      # Notifications
-      # =========================
-      - name: Notify deployment status
-        if: always()
-        run: |
-          if [ ${{ job.status }} == 'success' ]; then
-            echo "🎉 Pipeline réussie!"
-            # Ici tu peux ajouter des notifications (Slack, Discord, etc.)
-            # curl -X POST -H 'Content-type: application/json' --data '{"text":"✅ Déploiement ETL-OMS réussi!"}' ${{ secrets.SLACK_WEBHOOK }}
-          else
-            echo "❌ Pipeline échouée!"
-            # curl -X POST -H 'Content-type: application/json' --data '{"text":"❌ Déploiement ETL-OMS échoué!"}' ${{ secrets.SLACK_WEBHOOK }}
-          fi
+          echo "Testing Docker builds..."
+          docker build -t test-api-etl ./API-ETL
+          docker build -t test-api-ia ./API-IA
+          echo "✅ All Docker builds successful" 

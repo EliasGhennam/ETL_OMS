@@ -1,8 +1,6 @@
 import pandas as pd
 import torch
 import pickle
-import os
-import numpy as np
 from train_ia_lstm import LSTMModel
 
 # === CONFIGURATION DU SCÉNARIO ===
