@@ -66,6 +66,7 @@
     "step4Desc": "Utiliser le modèle entraîné pour générer une prédiction.",
     "step4Btn": "Prédire",
     "uploadBtn": "Uploader les Fichiers",
-    "resultsTitle": "Résultats de la Prédiction"
+    "resultsTitle": "Résultats de la Prédiction",
+    "dropzone": "Déposez vos fichiers ici pour la prédiction"
   }
 } 

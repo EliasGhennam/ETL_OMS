@@ -3,9 +3,10 @@
 import { useRef } from 'react';
 import { useFrame } from '@react-three/fiber';
 import { Stars as DreiStars } from '@react-three/drei';
+import { Points } from 'three';
 
 export function Stars() {
-  const starsRef = useRef<{ rotation: { y: number } }>(null);
+  const starsRef = useRef<Points>(null);
 
   useFrame(({ clock }) => {
     if (starsRef.current) {

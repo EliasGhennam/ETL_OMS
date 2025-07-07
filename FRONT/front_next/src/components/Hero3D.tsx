@@ -3,7 +3,7 @@
 import { Canvas, useFrame } from "@react-three/fiber";
 import { OrbitControls, useGLTF } from "@react-three/drei";
 import { Suspense, useRef, useEffect } from "react";
-import { Group } from "three";
+import { Group, Object3D, Mesh, MeshStandardMaterial } from "three";
 
 function Globe() {
   const globeRef = useRef<Group>(null);
@@ -11,11 +11,25 @@ function Globe() {
 
   useEffect(() => {
     console.log('Model loaded:', scene);
-    scene.traverse((child: { isMesh?: boolean; material?: { metalness?: number; roughness?: number; envMapIntensity?: number } }) => {
-      if (child.isMesh) {
-        child.material.metalness = 0.5;
-        child.material.roughness = 1;
-        child.material.envMapIntensity = 1;
+    scene.traverse((child: Object3D) => {
+      if ((child as Mesh).isMesh) {
+        const mesh = child as Mesh;
+        if (mesh.material && !(mesh.material instanceof Array) && (mesh.material as MeshStandardMaterial).metalness !== undefined) {
+          const mat = mesh.material as MeshStandardMaterial;
+          mat.metalness = 0.5;
+          mat.roughness = 1;
+          mat.envMapIntensity = 1;
+        }
+        if (Array.isArray(mesh.material)) {
+          mesh.material.forEach((m) => {
+            if ((m as MeshStandardMaterial).metalness !== undefined) {
+              const mat = m as MeshStandardMaterial;
+              mat.metalness = 0.5;
+              mat.roughness = 1;
+              mat.envMapIntensity = 1;
+            }
+          });
+        }
       }
     });
   }, [scene]);

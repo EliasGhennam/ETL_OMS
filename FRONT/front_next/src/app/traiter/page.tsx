@@ -11,7 +11,6 @@ export default function TraiterPage() {
   const [files, setFiles] = useState<File[]>([]);
   const [logs, setLogs] = useState("");
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
   const [dragActive, setDragActive] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
   const eventSourceRef = useRef<EventSource | null>(null);
@@ -35,7 +34,6 @@ export default function TraiterPage() {
     const droppedFiles = e.dataTransfer.files;
     if (droppedFiles && droppedFiles.length > 0) {
       setFiles(prevFiles => [...prevFiles, ...Array.from(droppedFiles)]);
-      setError(null);
     }
   };
 
@@ -43,7 +41,6 @@ export default function TraiterPage() {
     const selectedFiles = e.target.files;
     if (selectedFiles && selectedFiles.length > 0) {
       setFiles(prevFiles => [...prevFiles, ...Array.from(selectedFiles)]);
-      setError(null);
     }
   };
 
@@ -53,7 +50,6 @@ export default function TraiterPage() {
     e.preventDefault();
     if (!files.length) return;
     setLoading(true);
-    setError(null);
     setLogs("");
 
     const formData = new FormData();
@@ -76,16 +72,14 @@ export default function TraiterPage() {
         } catch {
             es.close();
             setLoading(false);
-            setError("Erreur de parsing des logs.");
         }
       };
       es.onerror = () => {
         es.close();
         setLoading(false);
-        setError("Erreur de connexion pour les logs en direct.");
       };
     } catch {
-      setError("API injoignable");
+      // setError("API injoignable");
     }
   };
   
@@ -95,8 +89,8 @@ export default function TraiterPage() {
       const res = await fetch("http://127.0.0.1:5000/ping");
       const data = await res.json();
       setLogs(JSON.stringify(data, null, 2));
-    } catch (error) {
-      setError("API injoignable");
+    } catch {
+      // setError("API injoignable");
     }
   };
 
@@ -174,12 +168,6 @@ export default function TraiterPage() {
                 </Button>
                 <Button type="button" onClick={handlePing} variant="outline" className="w-full sm:w-auto">{t("pingApi")}</Button>
               </div>
-
-              {error && (
-                <div className="bg-destructive/10 text-destructive text-sm font-medium p-3 rounded-md text-center">
-                  {error}
-                </div>
-              )}
             </CardContent>
           </Card>
         </form>

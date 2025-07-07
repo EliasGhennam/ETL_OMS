@@ -66,6 +66,7 @@
     "step4Desc": "Use the trained model to generate a prediction.",
     "step4Btn": "Predict",
     "uploadBtn": "Upload Files",
-    "resultsTitle": "Prediction Results"
+    "resultsTitle": "Prediction Results",
+    "dropzone": "Drop your files here for prediction"
   }
 } 

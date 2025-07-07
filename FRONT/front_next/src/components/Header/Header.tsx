@@ -14,7 +14,7 @@ export function Header() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const { theme, systemTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
-  const { country, language, loading, error } = useCountryAndLanguage();
+  const { country } = useCountryAndLanguage();
   const t = useTranslations("menu");
 
   useEffect(() => {

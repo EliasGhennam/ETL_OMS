@@ -10,7 +10,7 @@ UPLOAD_FOLDER = 'data_sources'
 ALLOWED_EXTENSIONS = {'csv', 'xlsx'}
 
 app = Flask(__name__)
-CORS(app, origins=["http://localhost:3000"])
+CORS(app, origins=["http://localhost:3000", "http://localhost:3001"])
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 

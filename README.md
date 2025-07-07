@@ -30,7 +30,7 @@ projet/
 ├── API-JAVA/        # API REST Spring Boot
 ├── FRONT/           # Application Angular
 ├── tests/           # Tests unitaires et d'intégration
-├── docker-compose.yml
+├── docker compose.yml
 └── README.md
 ```
 
@@ -43,7 +43,7 @@ git clone https://github.com/EliasGhennam/ETL_OMS
 cd ETL_OMS
 
 # Lancer toute la stack avec base PostgreSQL
-docker-compose up --build
+docker compose up --build
 ```
 
 > Les services exposent :
@@ -167,6 +167,12 @@ ng serve
 
 ---
 
+
+**Commandes utiles**
+
+```bash
+  act -j build-test-lint --bind -P ubuntu-latest=catthehacker/ubuntu:act-latest
+```
 
 
 ## 📝 Licence

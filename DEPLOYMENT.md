@@ -39,8 +39,8 @@ sudo sh get-docker.sh
 sudo usermod -aG docker $USER
 
 # Installation de Docker Compose
-sudo curl -L "https://github.com/docker/compose/releases/download/v2.20.0/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
-sudo chmod +x /usr/local/bin/docker-compose
+sudo curl -L "https://github.com/docker/compose/releases/download/v2.20.0/docker compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker compose
+sudo chmod +x /usr/local/bin/docker compose
 ```
 
 ### 2. Structure des Dossiers
@@ -79,21 +79,21 @@ docker build -t etl-oms-frontend:latest ./FRONT/front_next
 ### 2. Lancement en Production
 ```bash
 # Copier les fichiers de configuration
-cp docker-compose.prod.yml /app/etl-oms/
+cp docker compose.prod.yml /app/etl-oms/
 cp nginx.conf /app/etl-oms/
 
 # Lancer les services
 cd /app/etl-oms
-docker-compose -f docker-compose.prod.yml up -d
+docker compose -f docker compose.prod.yml up -d
 ```
 
 ### 3. Vérification
 ```bash
 # Vérifier l'état des services
-docker-compose -f docker-compose.prod.yml ps
+docker compose -f docker compose.prod.yml ps
 
 # Vérifier les logs
-docker-compose -f docker-compose.prod.yml logs -f
+docker compose -f docker compose.prod.yml logs -f
 
 # Test de santé
 curl http://localhost/health
@@ -104,10 +104,10 @@ curl http://localhost/health
 ### 1. Logs
 ```bash
 # Logs de tous les services
-docker-compose -f docker-compose.prod.yml logs -f
+docker compose -f docker compose.prod.yml logs -f
 
 # Logs d'un service spécifique
-docker-compose -f docker-compose.prod.yml logs -f frontend
+docker compose -f docker compose.prod.yml logs -f frontend
 ```
 
 ### 2. Sauvegarde Base de Données
@@ -129,13 +129,13 @@ echo "0 2 * * * /app/etl-oms/backup.sh" | crontab -
 ### 3. Mise à Jour
 ```bash
 # Arrêter les services
-docker-compose -f docker-compose.prod.yml down
+docker compose -f docker compose.prod.yml down
 
 # Pull des nouvelles images
-docker-compose -f docker-compose.prod.yml pull
+docker compose -f docker compose.prod.yml pull
 
 # Redémarrer avec les nouvelles images
-docker-compose -f docker-compose.prod.yml up -d
+docker compose -f docker compose.prod.yml up -d
 
 # Nettoyer les anciennes images
 docker system prune -f
@@ -167,7 +167,7 @@ sudo chown $USER:$USER /app/etl-oms/ssl/*
 
 # Décommenter la section HTTPS dans nginx.conf
 # Redémarrer nginx
-docker-compose -f docker-compose.prod.yml restart nginx
+docker compose -f docker compose.prod.yml restart nginx
 ```
 
 ## Troubleshooting
@@ -177,7 +177,7 @@ docker-compose -f docker-compose.prod.yml restart nginx
 1. **Services ne démarrent pas**
    ```bash
    # Vérifier les logs
-   docker-compose -f docker-compose.prod.yml logs
+   docker compose -f docker compose.prod.yml logs
    
    # Vérifier l'espace disque
    df -h
@@ -192,7 +192,7 @@ docker-compose -f docker-compose.prod.yml restart nginx
    docker exec -it etl-oms-postgres psql -U $POSTGRES_USER -d pandemie
    
    # Vérifier les variables d'environnement
-   docker-compose -f docker-compose.prod.yml config
+   docker compose -f docker compose.prod.yml config
    ```
 
 3. **Frontend ne se charge pas**
@@ -207,7 +207,7 @@ docker-compose -f docker-compose.prod.yml restart nginx
 ### Commandes Utiles
 ```bash
 # Redémarrer un service
-docker-compose -f docker-compose.prod.yml restart service_name
+docker compose -f docker compose.prod.yml restart service_name
 
 # Voir les ressources utilisées
 docker stats

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { TrendingUp } from "lucide-react";
 import { Area, AreaChart, CartesianGrid, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recharts";
 import {
@@ -77,51 +77,7 @@ export function StatisticsDashboard() {
     fetchMaladies();
   }, []);
 
-  useEffect(() => {
-    if (selectedPays && selectedMaladie) {
-      fetchAllChartData();
-    }
-  }, [selectedPays, selectedMaladie, fetchAllChartData]);
-
-  // Ajout d'un useEffect pour suivre les changements de l'état des données
-  useEffect(() => {
-    console.log("Combined Nouveau Data state changed:", combinedNouveauData);
-    if (combinedNouveauData.length > 0) {
-      console.log("Combined Nouveau Data is not empty, chart should render.");
-    }
-  }, [combinedNouveauData]);
-
-  useEffect(() => {
-    console.log("Total Mort Data state changed:", totalMortData);
-    if (totalMortData.length > 0) {
-      console.log("Total Mort Data is not empty, chart should render.");
-    }
-  }, [totalMortData]);
-
-  useEffect(() => {
-    console.log("Total Cas Data state changed:", totalCasData);
-    if (totalCasData.length > 0) {
-      console.log("Total Cas Data is not empty, chart should render.");
-    }
-  }, [totalCasData]);
-
-  async function fetchPays() {
-    const res = await fetch(`${API_BASE}/pays`);
-    const data = await res.json();
-    const filtered = data.filter((p: { nom_pays: string }) => p.nom_pays !== "Inconnue");
-    setPays(filtered);
-    if (filtered.length > 0) setSelectedPays(filtered[0].id_pays);
-  }
-
-  async function fetchMaladies() {
-    const res = await fetch(`${API_BASE}/maladies`);
-    const data = await res.json();
-    const filtered = data.filter((m: { nom_maladie: string }) => m.nom_maladie !== "Inconnue");
-    setMaladies(filtered);
-    if (filtered.length > 0) setSelectedMaladie(filtered[0].id_maladie);
-  }
-
-  async function fetchAllChartData() {
+  const fetchAllChartData = useCallback(async () => {
     setIsLoading(true);
     try {
       const [nouveauMortRes, nouveauCasRes, totalMortRes, totalCasRes] = await Promise.all([
@@ -193,6 +149,50 @@ export function StatisticsDashboard() {
     } finally {
       setIsLoading(false);
     }
+  }, [selectedPays, selectedMaladie]);
+
+  useEffect(() => {
+    if (selectedPays && selectedMaladie) {
+      fetchAllChartData();
+    }
+  }, [selectedPays, selectedMaladie, fetchAllChartData]);
+
+  // Ajout d'un useEffect pour suivre les changements de l'état des données
+  useEffect(() => {
+    console.log("Combined Nouveau Data state changed:", combinedNouveauData);
+    if (combinedNouveauData.length > 0) {
+      console.log("Combined Nouveau Data is not empty, chart should render.");
+    }
+  }, [combinedNouveauData]);
+
+  useEffect(() => {
+    console.log("Total Mort Data state changed:", totalMortData);
+    if (totalMortData.length > 0) {
+      console.log("Total Mort Data is not empty, chart should render.");
+    }
+  }, [totalMortData]);
+
+  useEffect(() => {
+    console.log("Total Cas Data state changed:", totalCasData);
+    if (totalCasData.length > 0) {
+      console.log("Total Cas Data is not empty, chart should render.");
+    }
+  }, [totalCasData]);
+
+  async function fetchPays() {
+    const res = await fetch(`${API_BASE}/pays`);
+    const data = await res.json();
+    const filtered = data.filter((p: { nom_pays: string }) => p.nom_pays !== "Inconnue");
+    setPays(filtered);
+    if (filtered.length > 0) setSelectedPays(filtered[0].id_pays);
+  }
+
+  async function fetchMaladies() {
+    const res = await fetch(`${API_BASE}/maladies`);
+    const data = await res.json();
+    const filtered = data.filter((m: { nom_maladie: string }) => m.nom_maladie !== "Inconnue");
+    setMaladies(filtered);
+    if (filtered.length > 0) setSelectedMaladie(filtered[0].id_maladie);
   }
 
   const chartConfig = {

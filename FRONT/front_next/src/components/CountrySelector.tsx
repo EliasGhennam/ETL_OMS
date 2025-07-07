@@ -26,7 +26,7 @@ const COUNTRIES: { code: Country; label: string }[] = [
 
 export function CountrySelector() {
   const { setLanguage } = useLanguage();
-  const { country, language, loading, error } = useCountryAndLanguage();
+  const { country } = useCountryAndLanguage();
 
   const handleChange = (selectedCountry: Country) => {
     localStorage.setItem("country", selectedCountry);
@@ -37,7 +37,7 @@ export function CountrySelector() {
   };
 
   return (
-    <Select value={country} onValueChange={handleChange}>
+    <Select value={country ?? undefined} onValueChange={handleChange}>
       <SelectTrigger className="ml-2 w-40 text-sm">
         <SelectValue />
       </SelectTrigger>

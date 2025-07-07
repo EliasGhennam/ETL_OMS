@@ -71,7 +71,7 @@ export function useCountryAndLanguage() {
         setShowDialog(true);
         setLoading(false);
       });
-  }, []);
+  }, [country, language]);
 
   // Quand l'utilisateur choisit manuellement
   const manualSet = (c: Country, l: Language) => {
